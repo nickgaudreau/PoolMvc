@@ -1,0 +1,92 @@
+﻿@model IEnumerable<PoolHockeyBLL.BizEntities.UserInfoEntity>
+@{
+    ViewBag.Title = "Page Pricipale";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<div class="arriv">
+    <div class="container">
+        <div class="arriv-top">
+            <div class="col-md-6 arriv-left">
+                <img src="~/img/home/a.jpg" class="img-responsive" alt="">
+                <div class="arriv-info">
+                    <h3>CLASSEMENT</h3>
+                    <p>Classement et honneur individuel</p>
+                    <div class="crt-btn">
+                        <a href="@Url.Action("Table", "UserInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 arriv-right">
+                <img src="~/img/home/b.jpg" class="img-responsive img-opacity-dot-8" alt="">
+                <div class="arriv-info">
+                    <h3 class="text-black">TOUT EN UN</h3>
+                    <p class="text-black">Tout les choix et les statistiques</p>
+                    <div class="crt-btn-black">
+                        <a  href="@Url.Action("AllInOne", "UserInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <div class="arriv-bottm">
+            <div class="col-md-8 arriv-left1">
+                <img src="~/img/home/h.jpg" class="img-responsive" alt="">
+                <div class="arriv-info1">
+                    <h3>LES BLESSES</h3>
+                    <p>Blesses selon CBC sports</p>
+                    <div class="crt-btn">
+                        <a href="@Url.Action("Injured", "PlayerInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 arriv-right1">
+                <img src="~/img/home/d.jpg" class="img-responsive" alt="">
+                <div class="arriv-info2">
+                    <h3 class="text-black">Agents Libres</h3>
+                    <div class="crt-btn-black">
+                        <a href="@Url.Action("Undrafted", "PlayerInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <div class="arriv-las">
+            <div class="col-md-4 arriv-left2">
+                <img src="~/img/home/ff.jpg" class="img-responsive img-opacity-dot-8" alt="">
+                <div class="arriv-info2">
+                    @*<a href="@Url.Action("LeagueLeaders", "PlayerInfo", new {Area = "Common"})">
+                        <h3 class="text-black">POINTEURS LNH<i class="ars"></i>
+                        </h3></a>*@
+                    <h3 class="text-black">POINTEURS LNH</h3>
+                    <div class="crt-btn-black">
+                        <a href="@Url.Action("LeagueLeaders", "PlayerInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 arriv-middle">
+                <img src="~/img/home/anigif.gif" class="img-responsive gif" alt="">
+                <div class="arriv-info3">
+                    <h3>MEILLEUR DE RONDE</h3>
+                    <div class="crt-btn">
+                        <a href="@Url.Action("BestOfRound", "UserInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 arriv-right2">
+                <img src="~/img/home/g.jpg" class="img-responsive img-opacity-dot-8" alt="">
+                <div class="arriv-info2">
+                    @*<a href="@Url.Action("AllInOneLastYear", "UserInfo", new {Area = "Common"})" >
+                        <h3 class="text-black">POOL 2015-16<i class="ars"></i>
+                        </h3></a>*@
+                    <h3 class="text-black">POOL 2015-16</h3>
+                    <div class="crt-btn-black">
+                        <a href="@Url.Action("AllInOneLastYear", "UserInfo", new {Area = "Common"})">Allez &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+</div>
+

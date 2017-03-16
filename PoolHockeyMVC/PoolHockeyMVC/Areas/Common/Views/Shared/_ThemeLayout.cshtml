@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/theme/css")
+
+</head>
+<body data-spy="scroll">
+
+    <div class="container">
+        <ul id="gn-menu" class="gn-menu-main">
+            <li class="gn-trigger">
+                <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+                <nav class="gn-menu-wrapper">
+                    <div class="gn-scroller">
+                        <ul class="gn-menu">
+                            <li class="gn-search-item">
+                                <input placeholder="Search" type="search" class="gn-search">
+                                <a class="gn-icon gn-icon-search"><span>Search</span></a>
+                            </li>
+                            <li>
+                                <a href="#about" class="gn-icon gn-icon-download">About</a>
+                            </li>
+                            <li><a href="#service" class="gn-icon gn-icon-cog">Service</a></li>
+                            <li><a href="#works" class="gn-icon gn-icon-help">Works</a></li>
+                            <li>
+                                <a href="#contact" class="gn-icon gn-icon-archive">Contact</a>
+                            </li>
+                            <li>
+                                @*<a href="@Url.Action("Test", "Home")" class="gn-icon gn-icon-archive">Test NHLAPI</a>*@
+                                @*<a href="@Url.Action("Index", "AllStats", new {Area = "Common"})">AllStat - M</a>*@
+                            </li>
+                            <li>
+                                <a href="#contact" class="gn-icon gn-icon-archive">Contact</a>
+                            </li>
+                        </ul>
+                    </div><!-- /gn-scroller -->
+                </nav>
+            </li>
+            <li><a href="index.html">NINESTARS</a></li>
+            <li>
+                <ul class="company-social">
+                    <li class="social-facebook"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                    <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                    <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
+                    <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <section id="about" class="home-section text-center bg-gray">
+        <div class="heading-about marginbot-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+
+                        <div class="section-heading">
+                            <h2>About us</h2>
+                            <p>Lorem ipsum dolor sit amet, no nisl mentitum recusabo per, vim at blandit qualisque dissentiunt. Diam efficiantur conclusionemque ut has</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class="row">
+                @RenderBody()
+                <hr />
+                
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+
+                    <p>
+                        Copyright &copy; @DateTime.Now.Year Pool Hockey - by <a href="#">Goodrow</a>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/theme/js")
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

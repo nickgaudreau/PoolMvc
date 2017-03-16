@@ -1,0 +1,31 @@
+﻿=>29/10/2016 13:29:36  An Error occured :    at System.Net.WebClient.DownloadDataInternal(Uri address, WebRequest& request)
+   at System.Net.WebClient.DownloadString(Uri address)
+   at System.Net.WebClient.DownloadString(String address)
+   at PoolHockeyBLL.JsonUtility.GetSerializedJsonData(String url) Message : The remote server returned an error: (404) Not Found. Get data from url nhl api fail. 
+
+
+=>29/10/2016 13:29:42  An Error occured :  Message : Dummy exception NO raw data returned from JsonUtility.GetSerializedJsonData(url). 
+
+
+=>13/11/2016 14:56:12  An Error occured :  Message : Traded This player has been traded J. Falk to BUF . 
+
+
+=>13/11/2016 14:56:14  An Error occured :  Message : Traded This player has been traded M. Tennyson to CAR . 
+
+
+=>14/11/2016 08:16:35  An Error occured :  Message : Traded This player has been traded Q. Howden to WPG . 
+
+
+=>14/11/2016 21:05:16  An Error occured :    at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at PoolHockeyBLL.MailUtility.SendMail() in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolHockeyMVC\Test\BLL\PoolHockeyBLL\MailUtility.cs:line 34 Message : Service not available, closing transmission channel. The server response was: Cannot connect to SMTP server 208.118.63.38 (208.118.63.38:25), connect error 10060 Fail to send the email to: postmaster@poolhockey.info at smtp address: mail.poolhockey.info, with ssl port: 465. 
+
+
+=>16/11/2016 07:33:14  An Error occured :    at PoolHockeyBLL.Api.NhlApiTransactions.GetNhlApiTeamPlayersInfo(String team) in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolHockeyMVC\Test\BLL\PoolHockeyBLL\Api\NhlApiTransactions.cs:line 119 Message : Index was outside the bounds of the array. Fail while parsing deserrialize NHl aPi Data. 
+
+
+=>16/11/2016 07:33:14  An Error occured :  Message : Error Fail while parsing deserialize NHl aPi Data for team:STL. 
+
+

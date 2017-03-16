@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9E0DB073-8685-4746-B17C-FF30FF65874F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PoolHockeyBLL</RootNamespace>
+    <AssemblyName>PoolHockeyBLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\PoolHockeyMVC\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\..\Files\Compo\WebScrappingTool\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\PoolHockeyMVC\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ScrapySharp">
+      <HintPath>..\..\..\Files\Compo\WebScrappingTool\ScrapySharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ScrapySharp.Core">
+      <HintPath>..\..\..\Files\Compo\WebScrappingTool\ScrapySharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\ApiException.cs" />
+    <Compile Include="Api\InjuredApiTransactions.cs" />
+    <Compile Include="Api\MySportsFeedApiTransactions.cs" />
+    <Compile Include="Api\NhlApiTransactions.cs" />
+    <Compile Include="Api\NhlWebScrapingApiTransactions.cs" />
+    <Compile Include="Api\TeamScheduleApiTransactions.cs" />
+    <Compile Include="BizEntities\PastPlayerInfoEntity.cs" />
+    <Compile Include="BizEntities\PlayerInfoEntity.cs" />
+    <Compile Include="BizEntities\PoolLastYearEntity.cs" />
+    <Compile Include="BizEntities\Statuses.cs" />
+    <Compile Include="BizEntities\UserFactEntity.cs" />
+    <Compile Include="BizEntities\UserInfoEntity.cs" />
+    <Compile Include="Caching.cs" />
+    <Compile Include="ConfigServices.cs" />
+    <Compile Include="Constants\NhlApi.cs" />
+    <Compile Include="Constants\Rules.cs" />
+    <Compile Include="Constants\ScheduleApi.cs" />
+    <Compile Include="Constants\Teams.cs" />
+    <Compile Include="Contracts\ICaching.cs" />
+    <Compile Include="Contracts\IConfigServices.cs" />
+    <Compile Include="Contracts\IPastPlayerInfoServices.cs" />
+    <Compile Include="Contracts\IPlayerInfoServices.cs" />
+    <Compile Include="Contracts\IPoolLastYearServices.cs" />
+    <Compile Include="Contracts\ITeamScheduleServices.cs" />
+    <Compile Include="Contracts\IUserInfoServices.cs" />
+    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="JsonUtility.cs" />
+    <Compile Include="Log\LogError.cs" />
+    <Compile Include="MailUtility.cs" />
+    <Compile Include="PastPlayerInfoServices.cs" />
+    <Compile Include="PlayerInfoServices.cs" />
+    <Compile Include="PoolLastYearServices.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeamScheduleServices.cs" />
+    <Compile Include="UserInfoServices.cs" />
+    <Compile Include="ViewModels\PlayerInfoVm.cs" />
+    <Compile Include="ViewModels\UserFactVm.cs" />
+    <Compile Include="ViewModels\UserInfoVm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BOL\PoolHockeyBOL\PoolHockeyBOL.csproj">
+      <Project>{e904ae59-6bfc-49d6-85e0-7c3fa9de1e97}</Project>
+      <Name>PoolHockeyBOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DAL\PoolHockeyDAL\PoolHockeyDAL.csproj">
+      <Project>{acd4d882-fd63-49d7-9d9b-499a9c2548f0}</Project>
+      <Name>PoolHockeyDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Resolver\Resolver.csproj">
+      <Project>{9218b2ab-052c-49db-935d-45150c4053be}</Project>
+      <Name>Resolver</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Api\cumulative_player_stats.json" />
+    <None Include="Api\SeasonSchedule-20162017.json" />
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

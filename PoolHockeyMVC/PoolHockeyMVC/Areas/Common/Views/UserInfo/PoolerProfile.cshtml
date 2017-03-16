@@ -1,0 +1,420 @@
+﻿@using System.Linq
+@using PoolHockeyBLL.BizEntities
+@model IEnumerable<PlayerInfoEntity>
+
+<link href="~/Content/mod/quote-slider.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Pooler Profile";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<div class="banner-stats">
+    <div class="container-fluid">
+        <h1>Stats de @ViewBag.DisplayName</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
+    </div>
+</div>
+
+<div class="container">
+    <div class='row'>
+        <div class='col-md-offset-2 col-md-8'>
+            <div class="carousel slide" data-ride="carousel" id="quote-carousel">
+                <!-- Bottom Carousel Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#quote-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#quote-carousel" data-slide-to="1"></li>
+                    <li data-target="#quote-carousel" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Carousel Slides / Quotes -->
+                <div class="carousel-inner">
+
+                    <!-- Quote 1 -->
+                    <div class="item active">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@ViewBag.Pic" style="width: 100px; height: 100px;">
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead">
+                                        <span class="fa fa-trophy text-warning"></span> Points hier - @ViewBag.PtsLastD pts
+                                    </p>
+                                    <span>@ViewBag.DisplayName - </span>
+                                    <span>@DateTime.Now.AddDays(-1).ToString("D") </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote 2 -->
+                    <div class="item">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@ViewBag.Pic " style="width: 100px; height: 100px;">
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead">
+                                        <span class="fa fa-trophy text-warning"></span> Meilleur Mois - @ViewBag.BestMonth pts
+                                    </p>
+                                    <span>@ViewBag.DisplayName - </span>
+                                    <span>@ViewBag.BestMonthDate.ToString("Y") </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Quote 3 -->
+                    <div class="item">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@ViewBag.Pic" style="width: 100px; height: 100px;">
+                                    <!--<img class="img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/128.jpg" style="width: 100px;height:100px;">-->
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead">
+                                        <span class="fa fa-trophy text-warning"></span> Meilleur Jour - @ViewBag.BestDay pts
+                                    </p>
+                                    <span>@ViewBag.DisplayName - </span>
+                                    <span> @ViewBag.BestDayDate.ToString("D")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel Buttons Next/Prev -->
+                <a data-slide="prev" href="#quote-carousel" class="left carousel-control"><i class="fa fa-chevron-left"></i></a>
+                <a data-slide="next" href="#quote-carousel" class="right carousel-control"><i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <br />
+    <br />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="data">
+            <div class="table-responsive">
+                <table class="table table-condensed" id="dev-table">
+                    <thead>
+                        <tr>
+                            <th>R</th>
+                            <th>
+                                @*<a href="#" class="js-sort" data-sort="Asc" data-sortby="@PoolHockeyMVC.Resources.Global.Name">
+                                        @PoolHockeyMVC.Resources.Global.Name
+                                    </a>*@
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Name, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Name
+                           }, null)
+                            </th>
+                            <th>@PoolHockeyMVC.Resources.Global.Pos</th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Team, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Team
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Game, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Game
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Goal, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Goal
+                           }, null)
+
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Assist, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Assist
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Points, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Points
+                           }, null)
+                            </th>
+                            @*<th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.TimeOnIce, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.TimeOnIce
+                           }, null)
+
+                            </th>*@
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.PowerPlay, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.PowerPlay
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.ShortHanded, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.ShortHanded
+                           }, null)
+                            </th>
+                            @*<th>
+                                     @Html.ActionLink(PoolHockeyMVC.Resources.Global.GameWinning, "PoolerProfile", "UserInfo", new
+                                {
+                                    userEmail = ViewBag.UserEmail,
+                                    displayName = ViewBag.DisplayName,
+                                    sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                                    sortBy = PoolHockeyMVC.Resources.Global.GameWinning
+                                }, null)
+                                 </th>
+                                 <th>
+                                     @Html.ActionLink(PoolHockeyMVC.Resources.Global.OverTime, "PoolerProfile", "UserInfo", new
+                                {
+                                    userEmail = ViewBag.UserEmail,
+                                    displayName = ViewBag.DisplayName,
+                                    sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                                    sortBy = PoolHockeyMVC.Resources.Global.OverTime
+                                }, null)
+                                 </th>*@
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Yesterday, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Yesterday
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Week, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Week
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Month, "PoolerProfile", "UserInfo", new
+                           {
+                               userEmail = ViewBag.UserEmail,
+                               displayName = ViewBag.DisplayName,
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Month
+                           }, null)
+                            </th>
+                            <th>
+                                <span class="fa fa-male"></span>
+                            </th>
+                            <th>
+                                <span class="fa fa-clock-o"></span>
+                            </th>
+                            <th>
+                                <span class="fa fa-plus text-danger"></span>
+                            </th>
+                            <th>
+                                <span class="clickable filter" id="filter-toggler" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <i class="glyphicon glyphicon-filter"></i>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var counter = 1;
+                        }
+                        <tr>
+                            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtre joueur oublie" style="display: none;" />
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            var className = "";
+                            var htmlTd = "";
+                            if (item.I_Status == 1)
+                            {
+                                className = "row-best";
+                                htmlTd = "<span class='fa fa-trophy text-warning cursor-pointer' data-toggle='tooltip' data-placement='top' title='Meilleur de ronde.'></span>";
+                            }
+                            else if (item.I_Status == 2)
+                            {
+                                className = "row-worst";
+                                htmlTd = "<span class='fa fa-thumbs-o-down text-info cursor-pointer' data-toggle='tooltip' data-placement='top' title='Pire de ronde.'></span>";
+                            }
+                            else if (item.I_Status == 3)
+                            {
+                                className = "row-out";
+                                htmlTd = "<span class='fa fa-times text-danger cursor-pointer' data-toggle='tooltip' data-placement='top' title='Pire choix.'></span>";
+                            }
+
+                            <tr class="@className">
+                                <td>@counter</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Name)
+                                    @if (item.L_IsRookie)
+                                    { <span class="rookie-badge">R</span>}
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Pos)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Team)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Game)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Goal)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Assist)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Point)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.C_Toi)
+                                </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PpP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_ShP)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.I_GwG)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.I_OtG)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastD)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastW)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastM)
+                                </td>
+                                <td>
+                                    @Html.Raw(htmlTd)
+                                </td>
+                                <td>
+                                    @if (item.L_IsPlaying == true)
+                                    {
+                                        <span class="fa fa-hourglass-half cursor-pointer" data-toggle="tooltip" data-placement="top" title="Joue ce soir."></span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.L_IsInjured == true)
+                                    {
+                                        <span class="fa fa-wheelchair text-danger cursor-pointer" data-toggle="tooltip" data-placement="top" title="@item.C_InjStatus"></span>
+                                    }
+                                </td>
+
+
+
+                            </tr>
+                            {
+                                counter = counter + 1;
+                            }
+                        }
+
+                        @{
+                            var statsNoStatusOut = @Model.Where(player => player.I_Status != (int)Statuses.Out).ToList();
+                        }
+                        <tr class="text-bold">
+                            <td></td>
+                            <td>Total: </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                @statsNoStatusOut.Sum(p => p.I_Game)
+                            </td>
+                            <td>
+                                @statsNoStatusOut.Sum(p => p.I_Goal)
+                            </td>
+                            <td>
+                                @statsNoStatusOut.Sum(p => p.I_Assist)
+                            </td>
+                            <td>
+                                @statsNoStatusOut.Sum(p => p.I_Point)
+                            </td>
+                            <td></td>
+                            <td></td>
+                            @*<td></td>*@
+                            @*<td></td>
+                                <td></td>*@
+                            <td>@statsNoStatusOut.Sum(p => p.I_PtLastD)</td>
+                            <td>@statsNoStatusOut.Sum(p => p.I_PtLastW)</td>
+                            <td>@statsNoStatusOut.Sum(p => p.I_PtLastM)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="loading" class="modal off-top-25per">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Chargement</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mod/table-filter.js"></script>
+    <script src="~/Scripts/mod/quote-slider.js"></script>
+
+
+}

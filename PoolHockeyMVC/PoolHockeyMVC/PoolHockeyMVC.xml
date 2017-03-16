@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<publishData>
+    <publishProfile
+  publishUrl="https://nickgoodrow82-001-site2.ctempurl.com:8172/msdeploy.axd"
+  msdeploySite="nickgoodrow82-001-site2"
+  destinationAppUrl="http://nickgoodrow82-001-site2.ctempurl.com/"
+  profileName="Default Settings"
+  publishMethod="MSDeploy"
+  userName="ifc\nickgoodrow82-001" />
+</publishData>

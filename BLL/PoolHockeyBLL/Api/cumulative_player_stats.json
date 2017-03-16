@@ -1,0 +1,125 @@
+{
+  "cumulativeplayerstats": {
+    "lastUpdatedOn": "2016-12-10 12:51:37 PM",
+    "playerstatsentry": [
+      {
+        "player": {
+          "ID": "4419",
+          "LastName": "Abdelkader",
+          "FirstName": "Justin",
+          "JerseyNumber": "8",
+          "Position": "LW",
+          "Height": "6'1\"",
+          "Weight": "219",
+          "BirthDate": "1987-02-25",
+          "Age": "29",
+          "BirthCity": "Muskegon, MI",
+          "BirthCountry": "USA",
+          "IsRookie": "false"
+        },
+        "team": {
+          "ID": "16",
+          "City": "Detroit",
+          "Name": "Red Wings",
+          "Abbreviation": "DET"
+        },
+        "stats": {
+          "GamesPlayed": {
+            "@abbreviation": "GP",
+            "#text": "22"
+          },
+          "stats": {
+            "Goals": {
+              "@abbreviation": "G",
+              "#text": "4"
+            },
+            "Assists": {
+              "@abbreviation": "A",
+              "#text": "4"
+            },
+            "Points": {
+              "@abbreviation": "Pts",
+              "#text": "8"
+            },
+            "HatTricks": {
+              "@abbreviation": "Hat",
+              "#text": "0"
+            },
+            "PlusMinus": {
+              "@abbreviation": "+/-",
+              "#text": "-4"
+            },
+            "Shots": {
+              "@abbreviation": "Sh",
+              "#text": "35"
+            },
+            "ShotPercentage": {
+              "@abbreviation": "Sh%",
+              "#text": "11.4"
+            },
+            "Penalties": {
+              "@abbreviation": "Pn",
+              "#text": "5"
+            },
+            "PenaltyMinutes": {
+              "@abbreviation": "PIM",
+              "#text": "13"
+            },
+            "PowerplayGoals": {
+              "@abbreviation": "PPG",
+              "#text": "2"
+            },
+            "PowerplayAssists": {
+              "@abbreviation": "PPA",
+              "#text": "0"
+            },
+            "PowerplayPoints": {
+              "@abbreviation": "PPPts",
+              "#text": "2"
+            },
+            "ShorthandedGoals": {
+              "@abbreviation": "SHG",
+              "#text": "0"
+            },
+            "ShorthandedAssists": {
+              "@abbreviation": "SHA",
+              "#text": "1"
+            },
+            "ShorthandedPoints": {
+              "@abbreviation": "SHPts",
+              "#text": "1"
+            },
+            "GameWinningGoals": {
+              "@abbreviation": "GWG",
+              "#text": "0"
+            },
+            "GameTyingGoals": {
+              "@abbreviation": "GTG",
+              "#text": "0"
+            },
+            "Hits": {
+              "@abbreviation": "Ht",
+              "#text": "52"
+            },
+            "Faceoffs": {
+              "@abbreviation": "FO",
+              "#text": "4"
+            },
+            "FaceoffWins": {
+              "@abbreviation": "F/O W",
+              "#text": "0"
+            },
+            "FaceoffLosses": {
+              "@abbreviation": "F/O L",
+              "#text": "4"
+            },
+            "FaceoffPercent": {
+              "@abbreviation": "F/O %",
+              "#text": "000.0"
+            }
+          }
+        }
+      }
+	  ]
+  }
+}

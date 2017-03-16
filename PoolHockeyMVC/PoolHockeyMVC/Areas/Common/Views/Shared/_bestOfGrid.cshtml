@@ -1,0 +1,116 @@
+﻿@model IEnumerable<PoolHockeyBLL.BizEntities.PlayerInfoEntity>
+<div class="table-responsive">
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.DisplayName
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Name
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Team
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Game
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Goal
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Assist
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Points
+                </th>
+                @*<th>
+                    @PoolHockeyMVC.Resources.Global.TimeOnIce
+                </th>*@
+                <th>
+                    @PoolHockeyMVC.Resources.Global.PowerPlay
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.ShortHanded
+                </th>
+                @*<th>
+                        @PoolHockeyMVC.Resources.Global.GameWinning
+                    </th>
+                    <th>
+                        @PoolHockeyMVC.Resources.Global.OverTime
+                    </th>*@
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Yesterday
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Week
+                </th>
+                <th>
+                    @PoolHockeyMVC.Resources.Global.Month
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.C_UserEmail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.C_Name)
+                        @if (item.L_IsRookie)
+                        { <span class="rookie-badge">R</span>}
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.C_Team)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_Game)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_Goal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_Assist)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_Point)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.C_Toi)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_PpP)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_ShP)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.I_GwG)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.I_OtG)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_PtLastD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_PtLastW)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.I_PtLastM)
+                    </td>
+
+                </tr>
+            }
+
+
+
+        </tbody>
+
+    </table>
+
+</div>

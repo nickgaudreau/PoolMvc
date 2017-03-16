@@ -1,0 +1,270 @@
+﻿@using PoolHockeyBLL.BizEntities
+@model IEnumerable<PoolHockeyBLL.BizEntities.UserInfoEntity>
+@{
+    ViewBag.Title = "Classement";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<div class="banner-home">
+    <div class="container-fluid">
+        <h1>Classement 2016/2017</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
+    </div>
+</div>
+@*<h2>Saison 2016/2017</h2>*@
+<link href="~/Content/mod/quote-slider.css" rel="stylesheet" />
+
+
+@{
+    var userBestDay = new UserInfoEntity();
+    if (ViewBag.BestDay != null)
+    {
+        userBestDay = (UserInfoEntity)ViewBag.BestDay;
+    }
+
+    var userBestMonth = new UserInfoEntity();
+    if (ViewBag.BestMonth != null)
+    {
+        userBestMonth = (UserInfoEntity)ViewBag.BestMonth;
+    }
+
+    var userBestLastD = new UserInfoEntity();
+    if (ViewBag.BestPtsLastD != null)
+    {
+        userBestLastD = (UserInfoEntity)ViewBag.BestPtsLastD;
+    }
+
+
+}
+
+
+<div class="container">
+    @*<div class="row">
+            <div class='col-md-offset-2 col-md-8 text-center'>
+                <h2>Honneur Individuel </h2>
+            </div>
+        </div>*@
+    <div class='row'>
+        <div class='col-md-offset-2 col-md-8'>
+            <div class="carousel slide" data-ride="carousel" id="quote-carousel">
+                <!-- Bottom Carousel Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#quote-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#quote-carousel" data-slide-to="1"></li>
+                    <li data-target="#quote-carousel" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Carousel Slides / Quotes -->
+                <div class="carousel-inner">
+
+                    <!-- Quote 1 -->
+                    <div class="item active">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@userBestLastD.C_Pic" style="width: 100px; height: 100px;">
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead"><span class="fa fa-trophy text-warning"></span> Meilleur hier - @userBestLastD.I_PtLastD pts
+                                    </p>
+                                    <span>@userBestLastD.C_DisplayName - </span>
+                                    <span>@DateTime.Now.AddDays(-1).ToString("D") </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quote 2 -->
+                    <div class="item">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@userBestMonth.C_Pic" style="width: 100px; height: 100px;">
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead"><span class="fa fa-trophy text-warning"></span> Meilleur Mois - @userBestMonth.I_BestMonth pts
+                                    </p>
+                                    <span>@userBestMonth.C_DisplayName - </span>
+                                    <span>@userBestMonth.D_BestMonth.ToString("Y")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Quote 3 -->
+                    <div class="item">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-3 text-center">
+                                    <img class="img-circle" src="/img/user/@userBestDay.C_Pic" style="width: 100px; height: 100px;">
+                                    <!--<img class="img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/kolage/128.jpg" style="width: 100px;height:100px;">-->
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="lead"><span class="fa fa-trophy text-warning"></span> Meilleur Jour - @userBestDay.I_BestDay pts
+                                    </p>
+                                    <span>@userBestDay.C_DisplayName - </span>
+                                    <span>@userBestDay.D_BestDay.ToString("D") </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel Buttons Next/Prev -->
+                <a data-slide="prev" href="#quote-carousel" class="left carousel-control"><i class="fa fa-chevron-left"></i></a>
+                <a data-slide="next" href="#quote-carousel" class="right carousel-control"><i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
+
+    </div>
+    <br />
+    <br />
+</div>
+
+
+@*<h2>Classement </h2>*@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>R</th>
+                            <th>
+                                @PoolHockeyMVC.Resources.Global.DisplayName
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Game, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = PoolHockeyMVC.Resources.Global.Game
+                       }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Goal, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = PoolHockeyMVC.Resources.Global.Goal
+                       }, null)
+
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Assist, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = PoolHockeyMVC.Resources.Global.Assist
+                       }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Points, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = PoolHockeyMVC.Resources.Global.Points
+                       }, null)
+                            </th>
+                            <th>
+                                @*@PoolHockeyMVC.Resources.Global.Yesterday*@
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Yesterday, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = PoolHockeyMVC.Resources.Global.Yesterday
+                       }, null)
+
+                            </th>
+                            <th>
+                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Week, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = @PoolHockeyMVC.Resources.Global.Week
+                       }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Month, "Table", "UserInfo", new
+                       {
+                           sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                           sortBy = @PoolHockeyMVC.Resources.Global.Month
+                       }, null)
+                            </th>
+                        </tr>
+                    </thead>
+                    @{
+                        var counter = 1;
+                    }
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            //IEnumerable<PlayerInfoEntity> currUserPicks = new List<PlayerInfoEntity>();
+                            //if (ViewBag.PlayerInfoFiltered != null)
+                            //{
+                            //    currUserPicks = ((IEnumerable<PlayerInfoEntity>) ViewBag.PlayerInfoFiltered).ToList();
+                            //    currUserPicks = currUserPicks.Where(p => p.C_UserEmail == item.C_UserEmail);
+                            //}
+                            var className = "";
+                            if (counter == 1)
+                            {
+                                className = "row-first";
+                            }
+                            if (counter == 2)
+                            {
+                                className = "row-second";
+                            }
+                            if (counter == 3)
+                            {
+                                className = "row-third";
+                            }
+                            if (counter == 12)
+                            {
+                                className = "row-tenth";
+                            }
+                            if (counter == 13)
+                            {
+                                className = "row-eleventh";
+                            }
+                            if (counter == 14)
+                            {
+                                className = "row-twelfth";
+                            }
+
+                            <tr class="@className">
+                                <td>@counter</td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.C_DisplayName)*@
+                                    @Html.ActionLink(item.C_DisplayName, "PoolerProfile", "UserInfo", new{ userEmail = item.C_UserEmail, displayName = item.C_DisplayName}, null)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Games)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Goals)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Assists)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Points)
+                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.I_PtLastD)</td>
+                                <td> @Html.DisplayFor(modelItem => item.I_PtLastW)</td>
+                                <td> @Html.DisplayFor(modelItem => item.I_PtLastM)</td>
+                            </tr>
+                            {
+                                counter = counter + 1;
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts
+{
+
+    <script src="~/Scripts/mod/quote-slider.js"></script>
+}

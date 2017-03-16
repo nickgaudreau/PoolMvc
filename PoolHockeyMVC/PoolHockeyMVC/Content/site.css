@@ -1,0 +1,208 @@
+﻿/* Override Bootstrap */
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td {
+    text-align: left;
+}
+
+.fa-wheelchair {
+    font-weight: bold !important;
+}
+
+/* toolbar li right */
+.toolbar-right {
+    padding-left: 10px;
+    margin-right: 20px;
+}
+
+/* Table style*/
+.rookie-badge {
+    display:inline-block;
+    -moz-min-width:10px;
+    -ms-min-width:10px;
+    -o-min-width:10px;
+    -webkit-min-width:10px;
+    min-width:10px;
+	padding: 2px 6px;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #999;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+	top: -2px;
+	position: relative;
+}
+
+.row-best{ background: #fbfbe8; }
+.row-worst{ background: aliceblue; }
+.row-out{ background: #f7efef !important; /*important to override possible worst and out, out to win*/ }
+
+.row-first{ background: #f9d6d6;}
+.row-second{ background: #f9eaea;}
+.row-third{ background: #f9f3f3;}
+.row-tenth{background: #f5f8fb;}
+.row-eleventh{background: #e9f2fb;}
+.row-twelfth{background: #ddecf9;}
+
+td a {
+    font-weight: bold;
+}
+
+
+/*offset*/
+
+.off-left-12 {
+    margin-left: 12px;
+}
+
+.off-left-20 {
+    margin-left: 20px;
+}
+
+.off-left-10 {
+    margin-left: 10px;
+}
+
+.off-top-25per {
+    top: 25%;
+}
+
+/* BANNER */
+.banner-home {
+    text-align: center;
+    width: 100%;
+    height: 250px;
+    display: block;
+    background: url(../img/ice2.jpg)no-repeat;
+    padding: 5em 0;
+    margin-bottom: 50px;
+}
+
+    .banner-home h1 {
+        font-size: 3em;
+        color: #fff;
+        font-family: 'Ubuntu-Regular';
+    }
+
+    .banner-home h2 {
+        font-size: 0.9em;
+        color: #fff;
+        margin-top: 1em;
+    }
+
+        .banner-home h2 a {
+            color: #f67777;
+        }
+
+        .banner-home h2 label {
+            margin: 0 0.4em;
+        }
+
+    .banner-home em {
+        width: 100px;
+        height: 2px;
+        display: block;
+        background: #fff;
+        border-radius: 10px;
+        margin: 0.5em auto;
+    }
+
+.banner-stats {
+    text-align: center;
+    width: 100%;
+    height: 250px;
+    display: block;
+    background: url(../img/ice-rink.jpg)no-repeat;
+    padding: 5em 0;
+    margin-bottom: 50px;
+}
+
+    .banner-stats h1 {
+        font-size: 3em;
+        color: #fff;
+        font-family: 'Ubuntu-Regular';
+    }
+
+    .banner-stats h2 {
+        font-size: 0.9em;
+        color: #fff;
+        margin-top: 1em;
+    }
+
+        .banner-stats h2 a {
+            color: #f67777;
+        }
+
+        .banner-stats h2 label {
+            margin: 0 0.4em;
+        }
+
+    .banner-stats em {
+        width: 100px;
+        height: 2px;
+        display: block;
+        background: #fff;
+        border-radius: 10px;
+        margin: 0.5em auto;
+    }
+
+/*Other*/
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+a.gn-icon-search2 {
+    top: 0;
+    left: 0;
+    height: 60px;
+}
+
+    a.gn-icon-search2:before {
+        content: "\e005";
+    }
+
+.gn-search-item {
+    line-height: 58px !important;
+}
+
+@media (max-width:768px) {
+    .gn-search-item {
+        display: none !important;
+    }
+    .last-update {
+        display: none !important;
+    }
+}
+
+@media (min-width:1200px) {
+    .banner-home {
+        text-align: center;
+        width: 100%;
+        height: 250px;
+        display: block;
+        background: url(../img/ice2.jpg)no-repeat;
+        padding: 5em 0;
+        margin-bottom: 50px;
+        -ms-background-size: 100%;
+        background-size: 100%;
+    }
+
+    .banner-stats {
+        text-align: center;
+        width: 100%;
+        height: 250px;
+        display: block;
+        background: url(../img/ice-rink.jpg)no-repeat;
+        padding: 5em 0;
+        margin-bottom: 50px;
+        -ms-background-size: 100%;
+        background-size: 100%;
+    }
+}

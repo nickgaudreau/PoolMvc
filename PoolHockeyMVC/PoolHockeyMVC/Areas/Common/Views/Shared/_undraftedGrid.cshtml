@@ -1,0 +1,127 @@
+﻿@model IEnumerable<PoolHockeyBLL.BizEntities.PlayerInfoEntity>
+
+
+<table class="table table-condensed" id="dev-table">
+    <thead>
+        <tr>
+            <th>R</th>
+            <th>
+                @*<a href="#" class="js-sort" data-sort="Asc" data-sortby="@PoolHockeyMVC.Resources.Global.Name">
+                    @PoolHockeyMVC.Resources.Global.Name
+                </a>*@
+                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Name, "SortUndrafted", "PlayerInfo", new{sortOrder = ViewBag.SortOrder == "Asc" ? "Desc" : "Asc",
+                    sortBy = PoolHockeyMVC.Resources.Global.Name},
+                    new { @class = "js-sort" })
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Team
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Game
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Goal
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Assist
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Points
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.TimeOnIce
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.PowerPlay
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.ShortHanded
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.GameWinning
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.OverTime
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Yesterday
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Week
+            </th>
+            <th>
+                @PoolHockeyMVC.Resources.Global.Month
+            </th>
+            <th>
+                <span class="clickable filter" id="filter-toggler" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                    <i class="glyphicon glyphicon-filter"></i>
+                </span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var counter = 1;
+        }
+        <tr>
+            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtre joueur oublie" style="display: none;" />
+        </tr>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>@counter</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.C_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.C_Team)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_Game)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_Goal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_Assist)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_Point)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.C_Toi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_PpP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_ShP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_GwG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_OtG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_PtLastD)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_PtLastW)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.I_PtLastM)
+                </td>
+
+            </tr>
+            {
+                counter = counter + 1;
+            }
+        }
+
+
+
+    </tbody>
+
+</table>

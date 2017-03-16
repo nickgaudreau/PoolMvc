@@ -1,0 +1,112 @@
+﻿.jumbotron {
+  background: none;
+}
+.box {
+  position: relative;
+  min-height: 400px;
+}
+.box .img-circle {
+  position: absolute;
+  background-color: #FFF;
+  bottom: 25px;
+  left: 25px;
+  width: 75px;
+  height: 75px;
+}
+.box.fantasy > .box-label {
+  background-color: #c93f2f;
+}
+.box.game > .box-label {
+  background-color: #f4ef28;
+}
+.box.hockey > .box-bg {
+  background-image: url('../img/homepage_hero.jpg');
+}
+.box.golf > .box-bg {
+  background-image: url('../img/homepage_hero.jpg');
+}
+.box.baseball > .box-bg {
+  background-image: url('../img/homepage_hero.jpg');
+}
+.box-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 15px;
+  z-index: 3;
+  color: #fff;
+  text-transform: lowercase;
+  font-weight: 600;
+  font-size: 0.8em;
+}
+.box-body {
+  position: absolute;
+  height: 100%;
+}
+.box-content {
+  color: #fff;
+  padding: 25px;
+}
+.box-content .btn-link {
+  color: #fff;
+}
+.box-footer {
+  position: absolute;
+  bottom: 40px;
+  right: 10px;
+}
+.box-footer div {
+  padding-right: 10px;
+}
+.box-footer div a {
+  color: #fff;
+}
+.box-footer div a:hover {
+  color: #fff;
+}
+.box-footer div.coming-soon span {
+  background-color: #5ab410;
+  padding: 5px 10px;
+  color: #fff;
+  font-size: 0.9em;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.box-bg {
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
+.box-bg:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.featured .box-body {
+  position: static;
+}
+.featured .box-content p {
+  font-weight: 400;
+  line-height: 110%;
+}
+.featured .box-footer a:not(.last-of-type) {
+  margin-right: 15px;
+}
+@media only screen and (max-width: 767px) {
+  .box {
+    margin-bottom: 25px;
+  }
+  .featured.box .box-content {
+    margin-bottom: 15px !important;
+  }
+  .featured.box .box-content p {
+    font-size: 0.99em;
+  }
+  .featured.box .box-footer a:not(.last-of-type) {
+    margin-right: 5px;
+  }
+}

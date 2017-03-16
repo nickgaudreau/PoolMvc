@@ -1,0 +1,238 @@
+﻿@using System.Linq
+@using PoolHockeyBLL.BizEntities
+@model IEnumerable<PlayerInfoEntity>
+
+@{
+    ViewBag.Title = "Agents Libre";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<div class="banner-stats">
+    <div class="container-fluid">
+        <h1>Agents Libres</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="data">
+            <div class="table-responsive">
+                <table class="table table-condensed" id="dev-table">
+                    <thead>
+                        <tr>
+                            <th>R</th>
+                            <th>
+                                @*<a href="#" class="js-sort" data-sort="Asc" data-sortby="@PoolHockeyMVC.Resources.Global.Name">
+                                        @PoolHockeyMVC.Resources.Global.Name
+                                    </a>*@
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Name, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Name
+                           }, null)
+                            </th>
+                            <th>
+                                @PoolHockeyMVC.Resources.Global.Pos
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Team, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Team
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Game, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Game
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Goal, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Goal
+                           }, null)
+
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Assist, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Assist
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Points, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Points
+                           }, null)
+                            </th>
+                            @*<th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.TimeOnIce, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.TimeOnIce
+                           }, null)
+
+                            </th>*@
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.PowerPlay, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.PowerPlay
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.ShortHanded, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.ShortHanded
+                           }, null)
+                            </th>
+                            @*<th>
+                                         @Html.ActionLink(PoolHockeyMVC.Resources.Global.GameWinning, "Undrafted", "PlayerInfo", new
+                                {
+                                    sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                                    sortBy = PoolHockeyMVC.Resources.Global.GameWinning
+                                }, null)
+                                     </th>
+                                     <th>
+                                         @Html.ActionLink(PoolHockeyMVC.Resources.Global.OverTime, "Undrafted", "PlayerInfo", new
+                                {
+                                    sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                                    sortBy = PoolHockeyMVC.Resources.Global.OverTime
+                                }, null)
+                                     </th>*@
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Yesterday, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Yesterday
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Week, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Week
+                           }, null)
+                            </th>
+                            <th>
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Month, "Undrafted", "PlayerInfo", new
+                           {
+                               sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
+                               sortBy = PoolHockeyMVC.Resources.Global.Month
+                           }, null)
+                            </th>
+                            <th>
+                                <span class="clickable filter" id="filter-toggler" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <i class="glyphicon glyphicon-filter"></i>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var counter = 1;
+                        }
+                        <tr>
+                            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtre joueur oublie" style="display: none;" />
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>@counter</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Name)
+                                    @if (item.L_IsRookie)
+                                    { <span class="rookie-badge">R</span>}
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Pos)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Team)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Game)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Goal)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Assist)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_Point)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.C_Toi)
+                                </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PpP)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_ShP)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.I_GwG)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.I_OtG)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastD)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastW)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.I_PtLastM)
+                                </td>
+
+                            </tr>
+                            {
+                                counter = counter + 1;
+                            }
+                        }
+
+
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="loading" class="modal off-top-25per">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Chargement</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/mod/table-filter.js"></script>
+
+
+
+}
+

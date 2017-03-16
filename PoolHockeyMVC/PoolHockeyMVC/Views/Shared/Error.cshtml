@@ -1,0 +1,39 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Oups...";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<div class="banner-home">
+    <div class="container-fluid">
+        <h1>Une erreur c'est produite!</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>Erreur</h2>
+    </div>
+</div>
+
+
+<div class="col-md-12">
+    <div class="alert alert-dismissable alert-info">
+
+        <h4>
+            Quelque chose d'innatendu c'est produit...  
+        </h4>
+        <h5 ><strong>Pas de panique. </strong>
+            Revenez a la page principale en suivant ce lien.</h5> <a href="@Url.Action("Index", "Home", new {Area = "Common"})" class="btn btn-info">Retour page principale</a>
+        @*<p>
+            <h5>Developer notes</h5>
+            <ul>
+                <li>Action: @Model.ActionName</li>
+                <li>Controller: @Model.ControllerName</li>
+                <li>Exception Message: @Model.Exception.Message</li>
+                <li>Exception Stack: @Model.Exception.StackTrace</li>
+            </ul>
+
+        </p>*@
+
+        <p>Envoyer l'erreur a l'administrateur ( Yannick G.) par courriel:
+            <a href="mailto:yannickgaudreau@gmail.com?Subject=Une%20erreur%20cest%20produite&BODY=@Model.Exception.Message %20 @Model.Exception.StackTrace" target="_top">Envoyez</a>
+        </p>
+    </div>
+</div>

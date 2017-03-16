@@ -1,0 +1,88 @@
+﻿@using System.Linq
+@using PoolHockeyBLL.BizEntities
+@model IEnumerable<PlayerInfoEntity>
+
+@{
+    ViewBag.Title = "Les Blesses";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+
+    var injuryList = Model;
+    if (Model == null)
+    {
+        injuryList = new List<PlayerInfoEntity>();
+    }
+}
+
+<div class="banner-stats">
+    <div class="container-fluid">
+        <h1>Les Blesses...</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-condensed" id="dev-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @PoolHockeyMVC.Resources.Global.Name
+                            </th>
+                            <th>
+                                @PoolHockeyMVC.Resources.Global.Team
+                            </th>
+                            <th>
+                                @PoolHockeyMVC.Resources.Global.Injured
+                            </th>
+                            <th>
+                                Details
+                            </th>
+                            <th>
+                                <span class="clickable filter" id="filter-toggler" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+                                    <i class="glyphicon glyphicon-filter"></i>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtre joueur blesse" style="display: none;" />
+                        </tr>
+                        @foreach (var item in injuryList)
+                        {
+
+                            <tr>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_Team)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_InjStatus)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.C_InjDetails)
+                                </td>
+                            </tr>
+
+                        }
+
+
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/mod/table-filter.js"></script>
+}

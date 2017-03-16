@@ -1,0 +1,125 @@
+﻿@using PoolHockeyBLL.BizEntities
+@model IEnumerable<PlayerInfoEntity>
+
+@{
+    ViewBag.Title = "MEILLEUR DE RONDE";
+    Layout = "~/Views/Shared/_ThemeLayout.cshtml";
+}
+
+<link href="~/Content/views/best-of-round.css" rel="stylesheet" />
+
+<div class="banner-stats">
+    <div class="container-fluid">
+        <h1>MEILLEUR DE RONDE</h1>
+        <em></em>
+        <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
+    </div>
+</div>
+<div class="container">
+
+    <div class="row">
+        <nav aria-label="Page navigation">
+            <h3>Choisir une ronde:</h3>
+            <div class="btn-group pagination" role="group" aria-label="First group">
+                <button type="button" class="btn btn-default">1</button>
+                <button type="button" class="btn btn-default">2</button>
+                <button type="button" class="btn btn-default">3</button>
+                <button type="button" class="btn btn-default">4</button>
+                <button type="button" class="btn btn-default">5</button>
+                <button type="button" class="btn btn-default">6</button>
+                <button type="button" class="btn btn-default">7</button>
+                <button type="button" class="btn btn-default">8</button>
+                <button type="button" class="btn btn-default">9</button>
+                <button type="button" class="btn btn-default">10</button>
+                <button type="button" class="btn btn-default">11</button>
+                <button type="button" class="btn btn-default">12</button>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="data">
+                @Html.Partial("_bestOfGrid", Model)
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading" class="modal off-top-25per">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Chargement</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            /********Partial Ajax********/
+            $(document).ajaxStart(function () {
+                $('#loading').show();
+            });
+
+            $(document).ajaxStop(function () {
+                $('#loading').hide();
+            });
+
+
+
+            $('.pagination > button').click(function () {
+                var round = $(this).text();
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("SetBestOfRound", "UserInfo")', // If this JS is moved this url is lost..
+                    traditional: true, // this is needed for MVC ajax calling process
+                    data:
+                    {
+                        round: round
+                    },
+                    success: successFunc,
+                    error: errorFunc
+                });
+            });
+
+            function successFunc(data, status) {
+                $('#data').html(data);
+            }
+
+            function errorFunc(jqXHR, exception) {
+                var msg = '';
+                if (jqXHR.status === 0) {
+                    msg = 'Not connect.\n Verify Network.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = 'Time out error.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+                alert("Error... details: " + msg);
+            }
+
+
+
+        });
+    </script>
+}

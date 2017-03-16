@@ -1,0 +1,524 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PoolHockeyMVCEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="I_Pk" />
+          </Key>
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="T_LastUpdate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PastPlayerInfo">
+          <Key>
+            <PropertyRef Name="I_Pk" />
+          </Key>
+          <Property Name="I_ApiId" Type="int" Nullable="false" />
+          <Property Name="C_Team" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="C_Pos" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="C_Name" Type="varchar" MaxLength="55" Nullable="false" />
+          <Property Name="I_Point" Type="int" Nullable="false" />
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="L_Traded" Type="bit" Nullable="false" />
+          <Property Name="D_Date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlayerInfo">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="I_ApiId" Type="int" Nullable="false" />
+          <Property Name="C_Team" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="C_Code" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="C_Pos" Type="nvarchar" MaxLength="2" />
+          <Property Name="C_Name" Type="nvarchar" MaxLength="55" />
+          <Property Name="I_Game" Type="int" Nullable="false" />
+          <Property Name="I_Goal" Type="int" Nullable="false" />
+          <Property Name="I_Assist" Type="int" Nullable="false" />
+          <Property Name="I_Point" Type="int" Nullable="false" />
+          <Property Name="C_UserEmail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="I_Round" Type="int" Nullable="false" />
+          <Property Name="F_Avg" Type="float" Nullable="false" />
+          <Property Name="I_PpP" Type="int" Nullable="false" />
+          <Property Name="I_ShP" Type="int" Nullable="false" />
+          <Property Name="I_GwG" Type="int" Nullable="false" />
+          <Property Name="I_OtG" Type="int" Nullable="false" />
+          <Property Name="I_Status" Type="int" Nullable="false" />
+          <Property Name="I_PtLastD" Type="int" Nullable="false" />
+          <Property Name="I_PtLastW" Type="int" Nullable="false" />
+          <Property Name="I_PtLastM" Type="int" Nullable="false" />
+          <Property Name="L_Traded" Type="bit" Nullable="false" />
+          <Property Name="C_TradedTeam" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="C_Toi" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="L_IsInjured" Type="bit" Nullable="false" />
+          <Property Name="C_InjStatus" Type="nvarchar" MaxLength="250" />
+          <Property Name="C_InjDetails" Type="nvarchar" MaxLength="750" />
+          <Property Name="L_IsPlayoff" Type="bit" Nullable="false" />
+          <Property Name="L_IsPlaying" Type="bit" Nullable="false" />
+          <Property Name="L_IsRookie" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PoolLastYear">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="I_ApiId" Type="int" Nullable="false" />
+          <Property Name="C_Team" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="C_Code" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="C_Pos" Type="nvarchar" MaxLength="2" />
+          <Property Name="C_Name" Type="nvarchar" MaxLength="55" />
+          <Property Name="I_Game" Type="int" Nullable="false" />
+          <Property Name="I_Goal" Type="int" Nullable="false" />
+          <Property Name="I_Assist" Type="int" Nullable="false" />
+          <Property Name="I_Point" Type="int" Nullable="false" />
+          <Property Name="C_UserEmail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="I_Round" Type="int" Nullable="false" />
+          <Property Name="F_Avg" Type="float" Nullable="false" />
+          <Property Name="I_PpG" Type="int" Nullable="false" />
+          <Property Name="I_ShG" Type="int" Nullable="false" />
+          <Property Name="I_GwG" Type="int" Nullable="false" />
+          <Property Name="I_OtG" Type="int" Nullable="false" />
+          <Property Name="I_Status" Type="int" Nullable="false" />
+          <Property Name="I_PtLastD" Type="int" Nullable="false" />
+          <Property Name="I_PtLastW" Type="int" Nullable="false" />
+          <Property Name="I_PtLastM" Type="int" Nullable="false" />
+          <Property Name="L_Traded" Type="bit" Nullable="false" />
+          <Property Name="C_TradedTeam" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="C_Toi" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="L_IsInjured" Type="bit" Nullable="false" />
+          <Property Name="C_InjStatus" Type="nvarchar" MaxLength="250" />
+          <Property Name="C_InjDetails" Type="nvarchar" MaxLength="250" />
+          <Property Name="L_IsPlayoff" Type="bit" Nullable="false" />
+          <Property Name="L_IsPlaying" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TeamSchedule">
+          <Key>
+            <PropertyRef Name="I_TeamSchedulePk" />
+          </Key>
+          <Property Name="I_TeamSchedulePk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C_Team" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="D_Date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserFact">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C_Code" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="C_UserEmail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="I_BestMonth" Type="int" Nullable="false" />
+          <Property Name="D_BestMonth" Type="datetime" Nullable="false" />
+          <Property Name="I_BestWeek" Type="int" Nullable="false" />
+          <Property Name="D_BestWeek" Type="datetime" Nullable="false" />
+          <Property Name="I_BestDay" Type="int" Nullable="false" />
+          <Property Name="D_BestDay" Type="datetime" Nullable="false" />
+          <Property Name="I_BestRank" Type="int" Nullable="false" />
+          <Property Name="D_BestRank" Type="datetime" Nullable="false" />
+          <Property Name="I_WorstMonth" Type="int" Nullable="false" />
+          <Property Name="D_WorstMonth" Type="datetime" Nullable="false" />
+          <Property Name="I_WorstWeek" Type="int" Nullable="false" />
+          <Property Name="D_WorstWeek" Type="datetime" Nullable="false" />
+          <Property Name="I_WorstDay" Type="int" Nullable="false" />
+          <Property Name="D_WorstDay" Type="datetime" Nullable="false" />
+          <Property Name="I_WorstRank" Type="int" Nullable="false" />
+          <Property Name="D_WorstRank" Type="datetime" Nullable="false" />
+          <Property Name="I_PtDiffOn1st" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C_Code" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="C_UserEmail" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="C_DisplayName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="C_Pic" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="I_Games" Type="int" Nullable="false" />
+          <Property Name="I_Goals" Type="int" Nullable="false" />
+          <Property Name="I_Assists" Type="int" Nullable="false" />
+          <Property Name="I_Points" Type="int" Nullable="false" />
+          <Property Name="I_BestDay" Type="int" Nullable="false" />
+          <Property Name="D_BestDay" Type="date" Nullable="false" />
+          <Property Name="I_BestMonth" Type="int" Nullable="false" />
+          <Property Name="D_BestMonth" Type="date" Nullable="false" />
+          <Property Name="I_BestLastD" Type="int" Nullable="false" />
+          <Property Name="I_PtLastD" Type="int" Nullable="false" />
+          <Property Name="I_PtLastW" Type="int" Nullable="false" />
+          <Property Name="I_PtLastM" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="ClearAllInjuredStatuses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ClearAllStatuses" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ClearPlayingToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetLastUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SetLastUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="datetime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SetPlayingToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Team" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="PoolHockeyMVCEntitiesStoreContainer">
+          <EntitySet Name="Config" EntityType="Self.Config" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PastPlayerInfo" EntityType="Self.PastPlayerInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlayerInfo" EntityType="Self.PlayerInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PoolLastYear" EntityType="Self.PoolLastYear" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TeamSchedule" EntityType="Self.TeamSchedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserFact" EntityType="Self.UserFact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PoolHockeyMVCEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Config">
+          <Key>
+            <PropertyRef Name="I_Pk" />
+          </Key>
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="T_LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="PastPlayerInfo">
+          <Key>
+            <PropertyRef Name="I_Pk" />
+          </Key>
+          <Property Name="I_ApiId" Type="Int32" Nullable="false" />
+          <Property Name="C_Team" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="C_Pos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="C_Name" Type="String" MaxLength="55" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="I_Point" Type="Int32" Nullable="false" />
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="L_Traded" Type="Boolean" Nullable="false" />
+          <Property Name="D_Date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="PlayerInfo">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="I_ApiId" Type="Int32" Nullable="false" />
+          <Property Name="C_Team" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Pos" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="C_Name" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+          <Property Name="I_Game" Type="Int32" Nullable="false" />
+          <Property Name="I_Goal" Type="Int32" Nullable="false" />
+          <Property Name="I_Assist" Type="Int32" Nullable="false" />
+          <Property Name="I_Point" Type="Int32" Nullable="false" />
+          <Property Name="C_UserEmail" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="I_Round" Type="Int32" Nullable="false" />
+          <Property Name="F_Avg" Type="Double" Nullable="false" />
+          <Property Name="I_GwG" Type="Int32" Nullable="false" />
+          <Property Name="I_OtG" Type="Int32" Nullable="false" />
+          <Property Name="I_Status" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastD" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastW" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastM" Type="Int32" Nullable="false" />
+          <Property Name="L_Traded" Type="Boolean" Nullable="false" />
+          <Property Name="C_TradedTeam" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Toi" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="L_IsInjured" Type="Boolean" Nullable="false" />
+          <Property Name="C_InjStatus" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="C_InjDetails" Type="String" MaxLength="750" FixedLength="false" Unicode="true" />
+          <Property Name="L_IsPlayoff" Type="Boolean" Nullable="false" />
+          <Property Name="L_IsPlaying" Type="Boolean" Nullable="false" />
+          <Property Name="I_PpP" Type="Int32" Nullable="false" />
+          <Property Name="I_ShP" Type="Int32" Nullable="false" />
+          <Property Name="L_IsRookie" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PoolLastYear">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="I_ApiId" Type="Int32" Nullable="false" />
+          <Property Name="C_Team" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Pos" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="C_Name" Type="String" MaxLength="55" FixedLength="false" Unicode="true" />
+          <Property Name="I_Game" Type="Int32" Nullable="false" />
+          <Property Name="I_Goal" Type="Int32" Nullable="false" />
+          <Property Name="I_Assist" Type="Int32" Nullable="false" />
+          <Property Name="I_Point" Type="Int32" Nullable="false" />
+          <Property Name="C_UserEmail" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="I_Round" Type="Int32" Nullable="false" />
+          <Property Name="F_Avg" Type="Double" Nullable="false" />
+          <Property Name="I_PpG" Type="Int32" Nullable="false" />
+          <Property Name="I_ShG" Type="Int32" Nullable="false" />
+          <Property Name="I_GwG" Type="Int32" Nullable="false" />
+          <Property Name="I_OtG" Type="Int32" Nullable="false" />
+          <Property Name="I_Status" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastD" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastW" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastM" Type="Int32" Nullable="false" />
+          <Property Name="L_Traded" Type="Boolean" Nullable="false" />
+          <Property Name="C_TradedTeam" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Toi" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="L_IsInjured" Type="Boolean" Nullable="false" />
+          <Property Name="C_InjStatus" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="C_InjDetails" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="L_IsPlayoff" Type="Boolean" Nullable="false" />
+          <Property Name="L_IsPlaying" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TeamSchedule">
+          <Key>
+            <PropertyRef Name="I_TeamSchedulePk" />
+          </Key>
+          <Property Name="I_TeamSchedulePk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C_Team" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="D_Date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="UserFact">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C_Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_UserEmail" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="I_BestMonth" Type="Int32" Nullable="false" />
+          <Property Name="D_BestMonth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_BestWeek" Type="Int32" Nullable="false" />
+          <Property Name="D_BestWeek" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_BestDay" Type="Int32" Nullable="false" />
+          <Property Name="D_BestDay" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_BestRank" Type="Int32" Nullable="false" />
+          <Property Name="D_BestRank" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_WorstMonth" Type="Int32" Nullable="false" />
+          <Property Name="D_WorstMonth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_WorstWeek" Type="Int32" Nullable="false" />
+          <Property Name="D_WorstWeek" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_WorstDay" Type="Int32" Nullable="false" />
+          <Property Name="D_WorstDay" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_WorstRank" Type="Int32" Nullable="false" />
+          <Property Name="D_WorstRank" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="I_PtDiffOn1st" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="C_Code" />
+          </Key>
+          <Property Name="I_Pk" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C_Code" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_UserEmail" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_DisplayName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="C_Pic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="I_Games" Type="Int32" Nullable="false" />
+          <Property Name="I_Goals" Type="Int32" Nullable="false" />
+          <Property Name="I_Assists" Type="Int32" Nullable="false" />
+          <Property Name="I_Points" Type="Int32" Nullable="false" />
+          <Property Name="I_BestDay" Type="Int32" Nullable="false" />
+          <Property Name="D_BestDay" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="I_BestMonth" Type="Int32" Nullable="false" />
+          <Property Name="D_BestMonth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="I_BestLastD" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastD" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastW" Type="Int32" Nullable="false" />
+          <Property Name="I_PtLastM" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Configs" EntityType="Self.Config" />
+          <EntitySet Name="PastPlayerInfoes" EntityType="Self.PastPlayerInfo" />
+          <EntitySet Name="PlayerInfoes" EntityType="Self.PlayerInfo" />
+          <EntitySet Name="PoolLastYears" EntityType="Self.PoolLastYear" />
+          <EntitySet Name="TeamSchedules" EntityType="Self.TeamSchedule" />
+          <EntitySet Name="UserFacts" EntityType="Self.UserFact" />
+          <EntitySet Name="UserInfoes" EntityType="Self.UserInfo" />
+          <FunctionImport Name="ClearAllInjuredStatuses" />
+          <FunctionImport Name="ClearAllStatuses" />
+          <FunctionImport Name="ClearPlayingToday" />
+          <FunctionImport Name="GetLastUpdate" ReturnType="Collection(DateTime)" />
+          <FunctionImport Name="SetLastUpdate">
+          <Parameter Name="datetime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SetPlayingToday">
+          <Parameter Name="Team" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PoolHockeyMVCEntitiesStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Configs">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.Config">
+              <MappingFragment StoreEntitySet="Config">
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="T_LastUpdate" ColumnName="T_LastUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PastPlayerInfoes">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.PastPlayerInfo">
+              <MappingFragment StoreEntitySet="PastPlayerInfo">
+                <ScalarProperty Name="I_ApiId" ColumnName="I_ApiId" />
+                <ScalarProperty Name="C_Team" ColumnName="C_Team" />
+                <ScalarProperty Name="C_Pos" ColumnName="C_Pos" />
+                <ScalarProperty Name="C_Name" ColumnName="C_Name" />
+                <ScalarProperty Name="I_Point" ColumnName="I_Point" />
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="L_Traded" ColumnName="L_Traded" />
+                <ScalarProperty Name="D_Date" ColumnName="D_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlayerInfoes">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.PlayerInfo">
+              <MappingFragment StoreEntitySet="PlayerInfo">
+                <ScalarProperty Name="L_IsRookie" ColumnName="L_IsRookie" />
+                <ScalarProperty Name="I_ShP" ColumnName="I_ShP" />
+                <ScalarProperty Name="I_PpP" ColumnName="I_PpP" />
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="I_ApiId" ColumnName="I_ApiId" />
+                <ScalarProperty Name="C_Team" ColumnName="C_Team" />
+                <ScalarProperty Name="C_Code" ColumnName="C_Code" />
+                <ScalarProperty Name="C_Pos" ColumnName="C_Pos" />
+                <ScalarProperty Name="C_Name" ColumnName="C_Name" />
+                <ScalarProperty Name="I_Game" ColumnName="I_Game" />
+                <ScalarProperty Name="I_Goal" ColumnName="I_Goal" />
+                <ScalarProperty Name="I_Assist" ColumnName="I_Assist" />
+                <ScalarProperty Name="I_Point" ColumnName="I_Point" />
+                <ScalarProperty Name="C_UserEmail" ColumnName="C_UserEmail" />
+                <ScalarProperty Name="I_Round" ColumnName="I_Round" />
+                <ScalarProperty Name="F_Avg" ColumnName="F_Avg" />
+                <ScalarProperty Name="I_GwG" ColumnName="I_GwG" />
+                <ScalarProperty Name="I_OtG" ColumnName="I_OtG" />
+                <ScalarProperty Name="I_Status" ColumnName="I_Status" />
+                <ScalarProperty Name="I_PtLastD" ColumnName="I_PtLastD" />
+                <ScalarProperty Name="I_PtLastW" ColumnName="I_PtLastW" />
+                <ScalarProperty Name="I_PtLastM" ColumnName="I_PtLastM" />
+                <ScalarProperty Name="L_Traded" ColumnName="L_Traded" />
+                <ScalarProperty Name="C_TradedTeam" ColumnName="C_TradedTeam" />
+                <ScalarProperty Name="C_Toi" ColumnName="C_Toi" />
+                <ScalarProperty Name="L_IsInjured" ColumnName="L_IsInjured" />
+                <ScalarProperty Name="C_InjStatus" ColumnName="C_InjStatus" />
+                <ScalarProperty Name="C_InjDetails" ColumnName="C_InjDetails" />
+                <ScalarProperty Name="L_IsPlayoff" ColumnName="L_IsPlayoff" />
+                <ScalarProperty Name="L_IsPlaying" ColumnName="L_IsPlaying" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PoolLastYears">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.PoolLastYear">
+              <MappingFragment StoreEntitySet="PoolLastYear">
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="I_ApiId" ColumnName="I_ApiId" />
+                <ScalarProperty Name="C_Team" ColumnName="C_Team" />
+                <ScalarProperty Name="C_Code" ColumnName="C_Code" />
+                <ScalarProperty Name="C_Pos" ColumnName="C_Pos" />
+                <ScalarProperty Name="C_Name" ColumnName="C_Name" />
+                <ScalarProperty Name="I_Game" ColumnName="I_Game" />
+                <ScalarProperty Name="I_Goal" ColumnName="I_Goal" />
+                <ScalarProperty Name="I_Assist" ColumnName="I_Assist" />
+                <ScalarProperty Name="I_Point" ColumnName="I_Point" />
+                <ScalarProperty Name="C_UserEmail" ColumnName="C_UserEmail" />
+                <ScalarProperty Name="I_Round" ColumnName="I_Round" />
+                <ScalarProperty Name="F_Avg" ColumnName="F_Avg" />
+                <ScalarProperty Name="I_PpG" ColumnName="I_PpG" />
+                <ScalarProperty Name="I_ShG" ColumnName="I_ShG" />
+                <ScalarProperty Name="I_GwG" ColumnName="I_GwG" />
+                <ScalarProperty Name="I_OtG" ColumnName="I_OtG" />
+                <ScalarProperty Name="I_Status" ColumnName="I_Status" />
+                <ScalarProperty Name="I_PtLastD" ColumnName="I_PtLastD" />
+                <ScalarProperty Name="I_PtLastW" ColumnName="I_PtLastW" />
+                <ScalarProperty Name="I_PtLastM" ColumnName="I_PtLastM" />
+                <ScalarProperty Name="L_Traded" ColumnName="L_Traded" />
+                <ScalarProperty Name="C_TradedTeam" ColumnName="C_TradedTeam" />
+                <ScalarProperty Name="C_Toi" ColumnName="C_Toi" />
+                <ScalarProperty Name="L_IsInjured" ColumnName="L_IsInjured" />
+                <ScalarProperty Name="C_InjStatus" ColumnName="C_InjStatus" />
+                <ScalarProperty Name="C_InjDetails" ColumnName="C_InjDetails" />
+                <ScalarProperty Name="L_IsPlayoff" ColumnName="L_IsPlayoff" />
+                <ScalarProperty Name="L_IsPlaying" ColumnName="L_IsPlaying" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TeamSchedules">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.TeamSchedule">
+              <MappingFragment StoreEntitySet="TeamSchedule">
+                <ScalarProperty Name="I_TeamSchedulePk" ColumnName="I_TeamSchedulePk" />
+                <ScalarProperty Name="C_Team" ColumnName="C_Team" />
+                <ScalarProperty Name="D_Date" ColumnName="D_Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserFacts">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.UserFact">
+              <MappingFragment StoreEntitySet="UserFact">
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="C_Code" ColumnName="C_Code" />
+                <ScalarProperty Name="C_UserEmail" ColumnName="C_UserEmail" />
+                <ScalarProperty Name="I_BestMonth" ColumnName="I_BestMonth" />
+                <ScalarProperty Name="D_BestMonth" ColumnName="D_BestMonth" />
+                <ScalarProperty Name="I_BestWeek" ColumnName="I_BestWeek" />
+                <ScalarProperty Name="D_BestWeek" ColumnName="D_BestWeek" />
+                <ScalarProperty Name="I_BestDay" ColumnName="I_BestDay" />
+                <ScalarProperty Name="D_BestDay" ColumnName="D_BestDay" />
+                <ScalarProperty Name="I_BestRank" ColumnName="I_BestRank" />
+                <ScalarProperty Name="D_BestRank" ColumnName="D_BestRank" />
+                <ScalarProperty Name="I_WorstMonth" ColumnName="I_WorstMonth" />
+                <ScalarProperty Name="D_WorstMonth" ColumnName="D_WorstMonth" />
+                <ScalarProperty Name="I_WorstWeek" ColumnName="I_WorstWeek" />
+                <ScalarProperty Name="D_WorstWeek" ColumnName="D_WorstWeek" />
+                <ScalarProperty Name="I_WorstDay" ColumnName="I_WorstDay" />
+                <ScalarProperty Name="D_WorstDay" ColumnName="D_WorstDay" />
+                <ScalarProperty Name="I_WorstRank" ColumnName="I_WorstRank" />
+                <ScalarProperty Name="D_WorstRank" ColumnName="D_WorstRank" />
+                <ScalarProperty Name="I_PtDiffOn1st" ColumnName="I_PtDiffOn1st" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfoes">
+            <EntityTypeMapping TypeName="PoolHockeyMVCEntities.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="I_Pk" ColumnName="I_Pk" />
+                <ScalarProperty Name="C_Code" ColumnName="C_Code" />
+                <ScalarProperty Name="C_UserEmail" ColumnName="C_UserEmail" />
+                <ScalarProperty Name="C_DisplayName" ColumnName="C_DisplayName" />
+                <ScalarProperty Name="C_Pic" ColumnName="C_Pic" />
+                <ScalarProperty Name="I_Games" ColumnName="I_Games" />
+                <ScalarProperty Name="I_Goals" ColumnName="I_Goals" />
+                <ScalarProperty Name="I_Assists" ColumnName="I_Assists" />
+                <ScalarProperty Name="I_Points" ColumnName="I_Points" />
+                <ScalarProperty Name="I_BestDay" ColumnName="I_BestDay" />
+                <ScalarProperty Name="D_BestDay" ColumnName="D_BestDay" />
+                <ScalarProperty Name="I_BestMonth" ColumnName="I_BestMonth" />
+                <ScalarProperty Name="D_BestMonth" ColumnName="D_BestMonth" />
+                <ScalarProperty Name="I_BestLastD" ColumnName="I_BestLastD" />
+                <ScalarProperty Name="I_PtLastD" ColumnName="I_PtLastD" />
+                <ScalarProperty Name="I_PtLastW" ColumnName="I_PtLastW" />
+                <ScalarProperty Name="I_PtLastM" ColumnName="I_PtLastM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ClearAllInjuredStatuses" FunctionName="PoolHockeyMVCEntities.Store.ClearAllInjuredStatuses" />
+          <FunctionImportMapping FunctionImportName="ClearAllStatuses" FunctionName="PoolHockeyMVCEntities.Store.ClearAllStatuses" />
+          <FunctionImportMapping FunctionImportName="ClearPlayingToday" FunctionName="PoolHockeyMVCEntities.Store.ClearPlayingToday" />
+          <FunctionImportMapping FunctionImportName="GetLastUpdate" FunctionName="PoolHockeyMVCEntities.Store.GetLastUpdate" />
+          <FunctionImportMapping FunctionImportName="SetLastUpdate" FunctionName="PoolHockeyMVCEntities.Store.SetLastUpdate" />
+          <FunctionImportMapping FunctionImportName="SetPlayingToday" FunctionName="PoolHockeyMVCEntities.Store.SetPlayingToday" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
