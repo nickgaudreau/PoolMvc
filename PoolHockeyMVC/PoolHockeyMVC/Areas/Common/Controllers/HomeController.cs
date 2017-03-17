@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using PoolHockeyBLL.Contracts;
 
@@ -10,22 +9,24 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
     [Route("{action}")]
     public class HomeController : BaseController
     {
-        private readonly IUserInfoServices _userInfoServices;
+        //private readonly IUserInfoServices _userInfoServices;
 
-        public HomeController(IUserInfoServices userInfoServices, IConfigServices configServices) : base(configServices)
-        {
-            _userInfoServices = userInfoServices; //new UserInfoServices();
-        }
+        //public HomeController(IUserInfoServices userInfoServices, IConfigServices configServices) : base(configServices)
+        //{
+        //    _userInfoServices = userInfoServices; //new UserInfoServices();
+        //}
         
         // GET: Common/Home
         [Route("~/")]
         [Route]
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult Index()
         {
             try
             {
-                var userInfoEntities = _userInfoServices.GetAll().OrderByDescending(u => u.I_Points);
-                return View(userInfoEntities);
+                //var userInfoEntities = _userInfoServices.GetAll().OrderByDescending(u => u.I_Points);
+                //return View(userInfoEntities);
+                return View();
             }
             catch (Exception e)
             {

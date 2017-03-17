@@ -19,6 +19,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             _poolLastYearServices = poolLastYearServices;//new PoolLastYearServices();
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult AllInOneLastYear()
         {
             try

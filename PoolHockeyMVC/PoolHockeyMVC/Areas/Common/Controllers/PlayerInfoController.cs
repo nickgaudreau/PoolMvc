@@ -17,6 +17,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             _playerInfoServices = playerInfoServices;
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language", VaryByParam = "*")]
         public ActionResult Undrafted(string sortOrder = "Asc", string sortBy = "")
         {
             try
@@ -46,6 +47,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             return PartialView("_undraftedGrid", SortUtility.SortPlayerInfoTable(undrafted, sortBy, sortOrder));
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language", VaryByParam = "*")]
         public ActionResult LeagueLeaders(string sortOrder = "Asc", string sortBy = "")
         {
             try
@@ -65,6 +67,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             }
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult Injured()
         {
             try

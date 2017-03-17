@@ -25,6 +25,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             _poolLastYearServices = poolLastYearServices;
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language", VaryByParam = "*")]
         public ActionResult Table(string sortOrder = "Asc", string sortBy = ""/*, string dynamicSortOrder = "Asc", string dynamicSortBy = ""*/ )
         {
             try
@@ -52,6 +53,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             }
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult AllInOne()
         {
             //_userInfoServices.UpdateAll();
@@ -74,6 +76,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             }
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult BestOfRound()
         {
             try
@@ -102,6 +105,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
         /// </summary>
         /// <param name="round"></param>
         /// <returns></returns>
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language", VaryByParam = "*")]
         public ActionResult SetBestOfRound(int round)
         {
             var bestOfRnd = _playerInfoServices.GetBestPerRound(round);
@@ -118,6 +122,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             return PartialView("_bestOfGrid", bestOfRnd);
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language")]
         public ActionResult AllInOneLastYear()
         {
             try
@@ -154,6 +159,7 @@ namespace PoolHockeyMVC.Areas.Common.Controllers
             }
         }
 
+        [OutputCache(CacheProfile = "Long", VaryByHeader = "X-Requested-With;Accept-Language", VaryByParam = "*")]
         public ActionResult PoolerProfile(string userEmail, string displayName = "", string sortOrder = "Asc", string sortBy = "")
         {
             if (string.IsNullOrEmpty(userEmail))
