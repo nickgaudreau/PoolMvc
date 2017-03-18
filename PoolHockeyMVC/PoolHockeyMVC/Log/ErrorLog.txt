@@ -29,3 +29,32 @@
 =>16/11/2016 07:33:14  An Error occured :  Message : Error Fail while parsing deserialize NHl aPi Data for team:STL. 
 
 
+=>18/03/2017 11:46:07  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Found, code: NotFound. 
+
+
+=>18/03/2017 11:49:33  An Error occured :  Message : Application force to stop due to this reason: System.InvalidOperationException: An invalid request URI was provided. The request URI must either be an absolute URI or BaseAddress must be set.
+   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
+   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(Uri requestUri, HttpCompletionOption completionOption, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.GetAsync(String requestUri)
+   at PoolHockeyBLL.Api.ApiXmlClient.Get[T](String url, String uri) in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolMvcDi\TEST\BLL\PoolHockeyBLL\Api\ApiXmlClient.cs:line 29 News not retrieved: , code: 0. 
+
+
+=>18/03/2017 11:51:39  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Found, code: NotFound. 
+
+
+=>18/03/2017 13:32:18  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+
+
+=>18/03/2017 13:55:17  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+
+
+=>18/03/2017 13:55:32  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+
+
+=>18/03/2017 14:09:54  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+
+
+=>18/03/2017 14:15:35  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+
+

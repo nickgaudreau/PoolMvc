@@ -21,12 +21,14 @@ namespace PoolHockeyMVC
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/views/news.js"));
 
             bundles.Add(new StyleBundle("~/Content/styles").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/home.css"));
+                      "~/Content/home.css",
+                      "~/Content/views/news.css"));
 
             // Theme JS
             bundles.Add(new ScriptBundle("~/theme/script").Include(

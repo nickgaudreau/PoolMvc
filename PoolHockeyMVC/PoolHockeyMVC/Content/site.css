@@ -181,6 +181,9 @@ a.gn-icon-search2 {
     .gn-search-item {
         display: none !important;
     }
+    .news-li {
+        display: none !important;
+    }
     .last-update {
         display: none !important;
     }

@@ -32,8 +32,11 @@ namespace UnitTestProject
                 feed = (rss) serializer.Deserialize(reader);
             }
             var x = feed;
+            var y = x.channel.item.ToList();
+            
 
-            XmlReader rssFeed = XmlReader.Create(new StringReader(result));
+
+            //XmlReader rssFeed = XmlReader.Create(new StringReader(result));
         }
     }
 }

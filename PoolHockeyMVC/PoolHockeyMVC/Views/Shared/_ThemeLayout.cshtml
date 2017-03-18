@@ -29,6 +29,7 @@
                         <li><a href="@Url.Action("LeagueLeaders", "PlayerInfo", new {Area = "Common"})"> <span class="fa fa-bar-chart off-left-20"></span> <span class="off-left-20">Meneur LNH</span></a></li>
                         <li><a href="@Url.Action("BestOfRound", "UserInfo", new {Area = "Common"})"> <span class="fa fa-star off-left-20"></span> <span class="off-left-20">Meilleur de Ronde</span></a></li>
                         <li><a href="@Url.Action("AllInOneLastYear", "UserInfo", new {Area = "Common"})"> <span class="fa fa-sort-amount-asc off-left-20"></span> <span class="off-left-20">Pool 2015/16</span></a></li>
+                        <li><a href="@Url.Action("Table", "UserInfo", new {Area = "Common"})"> <span class="fa fa-info off-left-20"></span> <span class="off-left-20"> &nbsp; &nbsp; Information</span></a></li>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li><a href="@Url.Action("CreateAllPlayerInfo", "Tasks", new {Area = "Admin"})"> <span class="fa fa fa-refresh off-left-20"></span> <span class="off-left-20">New Player Info</span></a></li>
@@ -45,7 +46,7 @@
         <li><a class="last-update" href="@Url.Action("Index", "Home", new {Area = "Common"})">@GetLastUpdate()</a></li>
         <li>
             <ul id="ul-search" class="gn-menu pull-right">
-                <li><a href="@Url.Action("Table", "UserInfo", new {Area = "Common"})"> <span class="fa fa-info-circle toolbar-right"></span> <span class="toolbar-right">Info <span class="animated infinite bounce badge">5</span></span> </a></li>
+                <li class="news-li"><a href="@Url.Action("Index", "News", new {Area = "Common"})"> <span class="fa fa-info-circle toolbar-right animated bounce"></span> <span class="toolbar-right">Nouvelles LNH</span> </a></li>
                 @*<li class="social-facebook"><a href="@Url.Action("Index", "Tasks", new {Area = "Admin"})" target="_blank"><i class="fa fa-facebook"></i></a></li>
                 <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
                 <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>

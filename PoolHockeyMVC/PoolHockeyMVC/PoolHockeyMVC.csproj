@@ -191,6 +191,7 @@
     <Compile Include="Areas\Admin\Controllers\TasksController.cs" />
     <Compile Include="Areas\Common\Controllers\BaseController.cs" />
     <Compile Include="Areas\Common\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Common\Controllers\NewsController.cs" />
     <Compile Include="Areas\Common\Controllers\PlayerInfoController.cs" />
     <Compile Include="Areas\Common\Controllers\PoolLastYearController.cs" />
     <Compile Include="Areas\Common\Controllers\UserInfoController.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\views\news.css" />
     <Content Include="Content\views\best-of-round.css" />
     <Content Include="Content\big-icon-menu.css" />
     <Content Include="Content\bootstrap.css" />
@@ -269,6 +271,7 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Areas\Common\Views\Home\Index.cshtml" />
     <Content Include="Areas\Common\Views\PlayerInfo\LeagueLeaders.cshtml" />
+    <Content Include="Areas\Common\Views\News\Index.cshtml" />
     <None Include="Areas\Common\Views\PlayerInfo\Injured.cshtml" />
     <None Include="Areas\Common\Views\PlayerInfo\Undrafted.cshtml" />
     <Content Include="Areas\Common\Views\Shared\_bestOfGrid.cshtml" />
@@ -294,6 +297,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\views\all-in-one.js" />
     <Content Include="Scripts\views\best-of-round.js" />
+    <Content Include="Scripts\views\news.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Test - DI - log4net.txt" />
     <Content Include="theme\color\default.css" />
