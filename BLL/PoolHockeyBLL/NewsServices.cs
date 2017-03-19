@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PoolHockeyBLL.Api;
 using PoolHockeyBLL.ApiModels;
+using PoolHockeyBLL.ApiModels.EN;
 using PoolHockeyBLL.Contracts;
 using PoolHockeyBLL.Log;
 using PoolHockeyBLL.ViewModels;
@@ -14,7 +15,8 @@ namespace PoolHockeyBLL
         public IEnumerable<NewsFeedVm> GetItems()
         {
             var client = new Api.ApiXmlClient();
-            var result = client.Get<rss>("http://rss.radio-canada.ca/fils", "/sports/hockey.xml");
+            var result = client.Get<PoolHockeyBLL.ApiModels.FR.rss>("http://rss.radio-canada.ca/fils", "/sports/hockey.xml"); // FR
+            //var result = client.Get<PoolHockeyBLL.ApiModels.EN.rss>("http://www.cbc.ca/cmlink", "/rss-sports-nhl"); // ENG
 
             if (!result.Success || result.Data == null)
             {

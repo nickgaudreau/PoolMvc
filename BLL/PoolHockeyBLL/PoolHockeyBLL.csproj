@@ -65,7 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiModels\HockeyFeedFr.cs" />
+    <Compile Include="ApiModels\EN\HockeyFeedEn.cs" />
+    <Compile Include="ApiModels\FR\HockeyFeedFr.cs" />
     <Compile Include="Api\ApiXmlClient.cs" />
     <Compile Include="Api\IApiClient.cs" />
     <Compile Include="Api\ApiException.cs" />
