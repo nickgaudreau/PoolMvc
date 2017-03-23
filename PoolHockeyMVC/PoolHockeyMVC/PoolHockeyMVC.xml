@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <publishData>
-    <publishProfile
-  publishUrl="https://nickgoodrow82-001-site2.ctempurl.com:8172/msdeploy.axd"
-  msdeploySite="nickgoodrow82-001-site2"
-  destinationAppUrl="http://nickgoodrow82-001-site2.ctempurl.com/"
+  <publishProfile
+  publishUrl="https://nickgaudreau-001-site9.htempurl.com:8172/msdeploy.axd?site=nickgaudreau-001-site9"
+  msdeploySite="nickgaudreau-001-site9"
+  destinationAppUrl="http://nickgaudreau-001-site9.htempurl.com/"
   profileName="Default Settings"
-  publishMethod="MSDeploy"
-  userName="ifc\nickgoodrow82-001" />
+  publishMethod="MSDeploy" userName="ifc\nickgaudreau-001"
+  AllowUntrustedCertificate="True"
+   />
 </publishData>
