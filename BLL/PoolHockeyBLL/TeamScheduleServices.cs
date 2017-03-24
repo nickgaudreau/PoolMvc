@@ -73,7 +73,7 @@ namespace PoolHockeyBLL
         {
 
             var updated = false;
-            var teamPlayingToday = _unitOfWork.TeamScheduleRepository.GetMany(x => x.D_Date == DateTime.Today);
+            var teamPlayingToday = _unitOfWork.TeamScheduleRepository.GetManyQueryable(x => x.D_Date == DateTime.Today);
             _unitOfWork.ClearPlayingToday();
             foreach (var team in teamPlayingToday)
             {

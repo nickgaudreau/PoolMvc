@@ -41,7 +41,7 @@ namespace PoolHockeyBLL
         /// <returns></returns>
         public PlayerInfoEntity GetById(string playerInfoCode)
         {
-            var playerInfo = _unitOfWork.PlayerInfoRepository.GetByID(playerInfoCode);            if (playerInfo == null) return null;
+            var playerInfo = _unitOfWork.PlayerInfoRepository.GetByID(playerInfoCode).Result;            if (playerInfo == null) return null;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
             var playerInfoEntity = Mapper.Map<PlayerInfo, PlayerInfoEntity>(playerInfo);
@@ -56,7 +56,7 @@ namespace PoolHockeyBLL
             List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
             if (playerInfoCache == null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
+                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll();
                 _caching.AddToCache("PlayerInfoGetAll", playerInfo);
                 if (!playerInfo.Any()) return null;
             }
@@ -82,7 +82,7 @@ namespace PoolHockeyBLL
         /// <returns></returns>
         public IEnumerable<PlayerInfoEntity> GetAll()
         {
-            var playerInfos = _unitOfWork.PlayerInfoRepository.GetAll().ToList();            if (!playerInfos.Any()) return null; // TODO sghould also log
+            var playerInfos = _unitOfWork.PlayerInfoRepository.GetAll().Result;            if (!playerInfos.Any()) return null; // TODO sghould also log
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
             var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfos);
@@ -604,7 +604,7 @@ namespace PoolHockeyBLL
 
         public bool UpdateAvg()
         {
-            var players = _unitOfWork.PlayerInfoRepository.GetMany(p => p.I_Point > 0).ToList();
+            var players = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.I_Point > 0);
             if (!players.Any())
             {
                 LogError.Write(new Exception("No players found form DB.."), "Exception in UpdateAvg ");
@@ -635,7 +635,7 @@ namespace PoolHockeyBLL
         public bool UpdateStatus()
         {
             _unitOfWork.ClearAllStatus();
-            var players = _unitOfWork.PlayerInfoRepository.GetMany(p => p.C_UserEmail != string.Empty).ToList();
+            var players = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_UserEmail != string.Empty);
             if (!players.Any())
             {
                 LogError.Write(new Exception("No players found form DB.."), "Exception in Update status ");

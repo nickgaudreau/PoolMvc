@@ -117,7 +117,7 @@ namespace PoolHockeyBLL
         // not in use..
         public IEnumerable<UserInfoEntity> GetAllWhere(string userEmail)
         {
-            var userInfos = _unitOfWork.UserInfoRepository.GetMany(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
+            var userInfos = _unitOfWork.UserInfoRepository.GetManyQueryable(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
 
             Mapper.CreateMap<UserInfo, UserInfoEntity>();
             var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos);
@@ -128,7 +128,7 @@ namespace PoolHockeyBLL
         // not in contract
         internal int GetMonthlyPointsForUser(string usermail)
         {
-            var playerInfo = _unitOfWork.PlayerInfoRepository.GetMany(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
+            var playerInfo = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
             //var date = DateTime.Now;
 
             var total = 0;
@@ -227,7 +227,7 @@ namespace PoolHockeyBLL
 
             try
             {
-                var users = _unitOfWork.UserInfoRepository.GetAll().ToList();
+                var users = _unitOfWork.UserInfoRepository.GetAll().Result;
                 if (!users.Any())
                 {
                     LogError.Write(new Exception("Error"), "UserInfo Get all returned 0 values");
@@ -271,11 +271,10 @@ namespace PoolHockeyBLL
         {
             var playerInfo = _unitOfWork
                 .PlayerInfoRepository
-                .GetMany(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out)
-                .ToList();
+                .GetManyQueryable(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out).ToList();
 
 
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
 
             foreach (var user in userInfo)
             {

@@ -28,7 +28,7 @@ namespace PoolHockeyBLL
 
             if (pastPoolInfoCache == null)
             {
-                pastPoolInfo = _unitOfWork.PoolLastYearRepository.GetAll();
+                pastPoolInfo = _unitOfWork.PoolLastYearRepository.GetAll().Result;
                 _caching.AddToCache("PastPoolInfoGetAll", pastPoolInfo);
                 if (!pastPoolInfo.Any()) return null;
             }

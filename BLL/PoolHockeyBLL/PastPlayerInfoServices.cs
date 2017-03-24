@@ -45,7 +45,7 @@ namespace PoolHockeyBLL
         {
             //var lastSeasonLastDate = new DateTime(2016, 03, 21);
             var allPastDatForApiId =
-                _unitOfWork.PastPlayerInfoRepository.GetMany(x => x.I_ApiId == playerInfoEntity.I_ApiId ).ToList();//x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
+                _unitOfWork.PastPlayerInfoRepository.GetManyQueryable(x => x.I_ApiId == playerInfoEntity.I_ApiId );//x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
 
             var totalLastWeek = 0;
 
@@ -71,7 +71,7 @@ namespace PoolHockeyBLL
         public int GetMonthWhere(PlayerInfoEntity playerInfoEntity)
         {
             var allPastDatForApiId = _unitOfWork.PastPlayerInfoRepository
-                .GetMany(x => x.I_ApiId == playerInfoEntity.I_ApiId).ToList();//x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
+                .GetManyQueryable(x => x.I_ApiId == playerInfoEntity.I_ApiId);//x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
 
             //var lastSeasonLastDate = new DateTime(2016, 03, 21);
             var totalLastMonth = 0;
@@ -100,7 +100,7 @@ namespace PoolHockeyBLL
         public int GetActualMonthWhere(PlayerInfo playerInfoEntity) // todo change to playerInfoEntity or DTO
         {
             var allPastDatForApiId = _unitOfWork.PastPlayerInfoRepository
-                .GetMany(x => x.I_ApiId == playerInfoEntity.I_ApiId).ToList();//x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
+                .GetManyQueryable(x => x.I_ApiId == playerInfoEntity.I_ApiId);//x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos).ToList();
 
             var totalLastMonth = 0;
 
@@ -132,10 +132,10 @@ namespace PoolHockeyBLL
         {
             var dateToStore = DateTime.Now.AddDays(-1);
 
-            var listPlayerInfoForTeam = _unitOfWork.PlayerInfoRepository.GetMany(p => p.C_Team == playerInfoEntities.ElementAt(0).C_Team).ToList();
+            var listPlayerInfoForTeam = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_Team == playerInfoEntities.ElementAt(0).C_Team);
 
             var listPastPlayerInfoYesterdayForTeam =
-                _unitOfWork.PastPlayerInfoRepository.GetMany(x => x.D_Date == dateToStore && x.C_Team == playerInfoEntities.ElementAt(0).C_Team).ToList();
+                _unitOfWork.PastPlayerInfoRepository.GetManyQueryable(x => x.D_Date == dateToStore && x.C_Team == playerInfoEntities.ElementAt(0).C_Team);
 
 
             foreach (var playerInfoEntity in playerInfoEntities)
