@@ -52,28 +52,29 @@ namespace PoolHockeyBLL
         public IEnumerable<PlayerInfoEntity> GetBestPerRound(int round)
         {
             var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-
-            List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
-            if (playerInfoCache == null)
+            
+            if (playerInfoCache != null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll();
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
-                if (!playerInfo.Any()) return null;
-            }
-            else
-            {
-                playerInfo = playerInfoCache;
-            }
-
-            var playerInfoOrderedByRound = playerInfo
+                var playerInfo = playerInfoCache;
+                var playerInfoOrderedByRound = playerInfo
                 .Where(x => x.I_Round == round && x.L_Traded == false && x.C_UserEmail != String.Empty)
                 .OrderByDescending(p => p.I_Point)
                 .ThenBy(g => g.I_Game).ToList();
 
-            Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoOrderedByRound);
+                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
+                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoOrderedByRound);
 
-            return playerInfoEntities;
+                return playerInfoEntities;
+            }
+
+            var playerInfoOBR = _unitOfWork.PlayerInfoRepository.GetManyQueryable(x => x.I_Round == round && x.L_Traded == false && x.C_UserEmail != String.Empty)
+                .OrderByDescending(p => p.I_Point)
+                .ThenBy(g => g.I_Game);
+
+            Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
+            var playerInfoE = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoOBR.ToList());
+
+            return playerInfoE;
         }
 
         /// <summary>
@@ -82,7 +83,9 @@ namespace PoolHockeyBLL
         /// <returns></returns>
         public IEnumerable<PlayerInfoEntity> GetAll()
         {
+            // TODO check if in cahce => lookup userInfo.Getall
             var playerInfos = _unitOfWork.PlayerInfoRepository.GetAll().Result;            if (!playerInfos.Any()) return null; // TODO sghould also log
+            _caching.AddToCache("PlayerInfoGetAll", playerInfos);
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
             var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfos);
@@ -93,34 +96,46 @@ namespace PoolHockeyBLL
         public IEnumerable<PlayerInfoEntity> GetUndrafted()
         {
             var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-
-            List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
-            if (playerInfoCache == null)
+            
+            if (playerInfoCache != null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
-                if (!playerInfo.Any()) return null;
-            }
-            else
-            {
-                playerInfo = playerInfoCache;
+                var playerInfo = playerInfoCache;
+
+                var allWhere = playerInfo.Where(p => p.C_UserEmail == String.Empty && p.L_Traded == false).ToList();
+                if (!allWhere.Any())
+                {
+                    LogError.Write(new Exception("PlayerInfoServices"), "GetUndrafted returned 0");
+                    return null;
+                }
+                var playerInfoWhere = allWhere
+                    .OrderByDescending(z => z.I_Point)
+                    .ThenBy(y => y.I_Game)
+                    .Take(50);
+
+                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
+                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere.ToList());
+
+                return playerInfoEntities;
             }
 
-            var allWhere = playerInfo.Where(p => p.C_UserEmail == String.Empty && p.L_Traded == false).ToList();            if (!allWhere.Any())
+            var playerUndrafted = 
+                _unitOfWork.PlayerInfoRepository
+                .GetManyQueryable(p => p.C_UserEmail == String.Empty && p.L_Traded == false)
+                .OrderByDescending(z => z.I_Point)
+                .ThenBy(y => y.I_Game);
+
+            if (!playerUndrafted.Any())
             {
                 LogError.Write(new Exception("PlayerInfoServices"), "GetUndrafted returned 0");
-                return null; // TODO sghould also log
+                return null;
             }
 
-            var playerInfoWhere = allWhere
-                .OrderByDescending(z => z.I_Point)
-                .ThenBy(y => y.I_Game)
-                .Take(50).ToList();
+            var playerTop50Undrafted = playerUndrafted.Take(50);
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerTop50Undrafted.ToList());
 
-            return playerInfoEntities;
+            return playerInfoEs;
         }
 
         public IEnumerable<PlayerInfoEntity> GetLeagueLeaders()
@@ -131,8 +146,9 @@ namespace PoolHockeyBLL
             if (playerInfoCache == null)
             {
                 playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
+                
                 if (!playerInfo.Any()) return null;
+                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
             }
             else
             {
@@ -159,53 +175,59 @@ namespace PoolHockeyBLL
         public IEnumerable<PlayerInfoEntity> GetInjured()
         {
             var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-
-            List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
-            if (playerInfoCache == null)
+            
+            if (playerInfoCache != null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
-                if (!playerInfo.Any()) return null;
-            }
-            else
-            {
-                playerInfo = playerInfoCache;
+                var playerInfo = playerInfoCache;
+
+                var playerInfoWhere = playerInfo.Where(p => p.L_IsInjured == true).ToList();
+                if (!playerInfoWhere.Any())
+                {
+                    LogError.Write(new Exception("PlayerInfoServices"), "GetInjured returned 0");
+                    return null; // TODO sghould also log
+                }
+
+                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
+                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
+
+                return playerInfoEntities;
             }
 
-            var playerInfoWhere = playerInfo.Where(p => p.L_IsInjured == true).ToList();            if (!playerInfoWhere.Any())
+            var playerInfoW = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.L_IsInjured == true).ToList();            if (!playerInfoW.Any())
             {
                 LogError.Write(new Exception("PlayerInfoServices"), "GetInjured returned 0");
                 return null; // TODO sghould also log
             }
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoW);
 
-            return playerInfoEntities;
+            return playerInfoEs;
         }
 
         public IEnumerable<PlayerInfoEntity> GetAllWhere(string userEmail)
         {
             var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
 
-            List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
-            if (playerInfoCache == null)
+            
+            if (playerInfoCache != null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
-                if (!playerInfo.Any()) return null;
-            }
-            else
-            {
-                playerInfo = playerInfoCache;
+                var playerInfo = playerInfoCache;
+                var playerInfoWhere = playerInfo.Where(p => p.C_UserEmail == userEmail && p.L_Traded == false).ToList();
+                if (!playerInfoWhere.Any()) return null;
+
+                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
+                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
+
+                return playerInfoEntities;
             }
 
-            var playerInfoWhere = playerInfo.Where(p => p.C_UserEmail == userEmail && p.L_Traded == false).ToList();            if (!playerInfoWhere.Any()) return null;
+            var playerInfoW = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_UserEmail == userEmail && p.L_Traded == false).ToList();            if (!playerInfoW.Any()) return null;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoW);
 
-            return playerInfoEntities;
+            return playerInfoEs;
         }
 
         /// <summary>
@@ -290,15 +312,16 @@ namespace PoolHockeyBLL
         {
             var updated = false;
 
-
             foreach (var playerInfoEntity in playerInfoEntities)
             {
                 // via GEnRepo/UnitOFWork ctx
                 var playerInfo = _unitOfWork.PlayerInfoRepository
-                    .Get(x => x.I_ApiId == playerInfoEntity.I_ApiId);
+                    .GetFirst(x => x.I_ApiId == playerInfoEntity.I_ApiId);
+
+                var playerInfoResult = playerInfo.Result;
 
                 // player does not exist
-                if (playerInfo == null)
+                if (playerInfoResult == null)
                 {
                     // create and continue: either new player from minor... or new season
                     Create(playerInfoEntity); // todo fix the data inserted
@@ -392,33 +415,31 @@ namespace PoolHockeyBLL
 
                     #endregion
                     // Necessary stats for from NHL API
-                    playerInfo.I_Game = playerInfoEntity.I_Game;
-                    playerInfo.I_Goal = playerInfoEntity.I_Goal;
-                    playerInfo.I_Assist = playerInfoEntity.I_Assist;
-                    playerInfo.I_Point = playerInfoEntity.I_Point;
-                    playerInfo.C_Toi = playerInfoEntity.C_Toi;
-                    playerInfo.I_PpP = playerInfoEntity.I_PpP;
-                    playerInfo.I_ShP = playerInfoEntity.I_ShP;
-                    playerInfo.L_IsRookie = playerInfoEntity.L_IsRookie; // so I can keep same data next year
+                    playerInfoResult.I_Game = playerInfoEntity.I_Game;
+                    playerInfoResult.I_Goal = playerInfoEntity.I_Goal;
+                    playerInfoResult.I_Assist = playerInfoEntity.I_Assist;
+                    playerInfoResult.I_Point = playerInfoEntity.I_Point;
+                    playerInfoResult.C_Toi = playerInfoEntity.C_Toi;
+                    playerInfoResult.I_PpP = playerInfoEntity.I_PpP;
+                    playerInfoResult.I_ShP = playerInfoEntity.I_ShP;
+                    playerInfoResult.L_IsRookie = playerInfoEntity.L_IsRookie; // so I can keep same data next year
 
-                    playerInfo.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
-                    playerInfo.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
-                    playerInfo.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
-                    //playerInfo.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
+                    playerInfoResult.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
+                    playerInfoResult.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
+                    playerInfoResult.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
+                    //playerInfoResult.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
 
-                    _unitOfWork.PlayerInfoRepository.Update(playerInfo);
-
-
+                    _unitOfWork.PlayerInfoRepository.Update(playerInfoResult);
                 }
                 catch (ApplicationException ex)
                 {
                     LogError.Write(ex,
-                        $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfo.C_Name} and code: {playerInfo.C_Code}");
+                        $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
                 }
                 catch (Exception ex)
                 {
                     LogError.Write(ex,
-                        $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfo.C_Name} and code: {playerInfo.C_Code}");
+                        $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
                 }
             }
 
@@ -450,10 +471,12 @@ namespace PoolHockeyBLL
             {
                 // via GEnRepo/UnitOFWork ctx
                 var playerInfo = _unitOfWork.PlayerInfoRepository
-                    .Get(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
+                    .GetFirst(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
+
+                var playerInfoResult = playerInfo.Result;
 
                 // player does not exist
-                if (playerInfo == null)
+                if (playerInfoResult == null)
                 {
                     // create and continue
                     // TODO - Will have to find way to track exchange...Same concept. ID stays the same, but stats are split on the different team player stats page
@@ -551,36 +574,36 @@ namespace PoolHockeyBLL
 
                     #endregion
                     // Necessary stats for from NHL API
-                    playerInfo.I_Game = playerInfoEntity.I_Game;
-                    playerInfo.I_Goal = playerInfoEntity.I_Goal;
-                    playerInfo.I_Assist = playerInfoEntity.I_Assist;
-                    playerInfo.I_Point = playerInfoEntity.I_Point;
-                    playerInfo.C_Toi = playerInfoEntity.C_Toi;
-                    playerInfo.I_PpP = playerInfoEntity.I_PpP;
-                    playerInfo.I_ShP = playerInfoEntity.I_ShP;
+                    playerInfoResult.I_Game = playerInfoEntity.I_Game;
+                    playerInfoResult.I_Goal = playerInfoEntity.I_Goal;
+                    playerInfoResult.I_Assist = playerInfoEntity.I_Assist;
+                    playerInfoResult.I_Point = playerInfoEntity.I_Point;
+                    playerInfoResult.C_Toi = playerInfoEntity.C_Toi;
+                    playerInfoResult.I_PpP = playerInfoEntity.I_PpP;
+                    playerInfoResult.I_ShP = playerInfoEntity.I_ShP;
 
                     // removed with Scarpping
-                    //playerInfo.I_GwG = playerInfoEntity.I_GwG;
-                    //playerInfo.I_OtG = playerInfoEntity.I_OtG;
+                    //playerInfoResult.I_GwG = playerInfoEntity.I_GwG;
+                    //playerInfoResult.I_OtG = playerInfoEntity.I_OtG;
 
-                    playerInfo.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
-                    playerInfo.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
-                    playerInfo.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
-                    //playerInfo.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
+                    playerInfoResult.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
+                    playerInfoResult.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
+                    playerInfoResult.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
+                    //playerInfoResult.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
 
-                    _unitOfWork.PlayerInfoRepository.Update(playerInfo);
+                    _unitOfWork.PlayerInfoRepository.Update(playerInfoResult);
 
 
                 }
                 catch (ApplicationException ex)
                 {
                     LogError.Write(ex,
-                        $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfo.C_Name} and code: {playerInfo.C_Code}");
+                        $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
                 }
                 catch (Exception ex)
                 {
                     LogError.Write(ex,
-                        $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfo.C_Name} and code: {playerInfo.C_Code}");
+                        $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
                 }
             }
 
@@ -751,8 +774,8 @@ namespace PoolHockeyBLL
 
         public bool Exist(PlayerInfoEntity playerInfoEntity)
         {
-            var playerExist = _unitOfWork.PlayerInfoRepository.Get(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
-            return playerExist != null;
+            var playerExist = _unitOfWork.PlayerInfoRepository.GetFirst(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
+            return playerExist.Result != null;
         }
 
         ///// <summary>

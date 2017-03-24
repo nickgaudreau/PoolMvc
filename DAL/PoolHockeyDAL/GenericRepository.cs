@@ -45,7 +45,7 @@ namespace PoolHockeyDAL
 
         /// <summary>        /// generic method to get many record on the basis of a condition but query able.        /// </summary>        /// <param name="where"></param>        /// <returns></returns>        public virtual IQueryable<TEntity> GetManyQueryable(Func<TEntity, bool> where)        {            return DbSet.Where(where).AsQueryable();        }
 
-        /// <summary>        /// generic get method , fetches data for the entities on the basis of condition.        /// </summary>        /// <param name="where"></param>        /// <returns></returns>        public TEntity Get(Func<TEntity, Boolean> where)        {            return DbSet.FirstOrDefault<TEntity>(where);        }
+        /// <summary>        /// generic get method , fetches data for the entities on the basis of condition.        /// </summary>        /// <param name="where"></param>        /// <returns></returns>        public TEntity Get(Func<TEntity, Boolean> where)        {            throw new NotSupportedException();            return DbSet.FirstOrDefault<TEntity>(where); // Should not be used : use GetFirst(Expression<Func>) with Task         }
 
         /// <summary>        /// generic delete method , deletes data for the entities on the basis of condition.        /// </summary>        /// <param name="where"></param>        /// <returns></returns>        public void Delete(Func<TEntity, Boolean> where)        {            IQueryable<TEntity> objects = DbSet.Where<TEntity>(where).AsQueryable();            foreach (TEntity obj in objects)                DbSet.Remove(obj);        }
 
@@ -59,7 +59,7 @@ namespace PoolHockeyDAL
 
         /// <summary>        /// Gets a single record by the specified criteria (usually the unique identifier)        /// </summary>        /// <param name="predicate">Criteria to match on</param>        /// <returns>A single record that matches the specified criteria</returns>        public Task<TEntity> GetSingle(Expression<Func<TEntity, bool>> predicate)        {            return DbSet.SingleOrDefaultAsync<TEntity>(predicate);        }
 
-        /// <summary>        /// The first record matching the specified criteria        /// </summary>        /// <param name="predicate">Criteria to match on</param>        /// <returns>A single record containing the first record matching the specified criteria</returns>        public Task<TEntity> GetFirst(Expression<Func<TEntity, bool>> predicate)        {            return DbSet.FirstAsync<TEntity>(predicate);        }
+        /// <summary>        /// The first record matching the specified criteria        /// </summary>        /// <param name="predicate">Criteria to match on</param>        /// <returns>A single record containing the first record matching the specified criteria</returns>        public Task<TEntity> GetFirst(Expression<Func<TEntity, bool>> predicate)        {            return DbSet.FirstOrDefaultAsync<TEntity>(predicate);        }
 
         #endregion    }
 }

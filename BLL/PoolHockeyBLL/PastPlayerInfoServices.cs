@@ -31,14 +31,14 @@ namespace PoolHockeyBLL
         {
             //var lastSeasonLastDate = new DateTime(2016, 03, 21);
             var date = DateTime.Now.AddDays(-1);//lastSeasonLastDate.AddDays(-1);//DateTime.Now.AddDays(-1);
-            var pastPlayerInfo = _unitOfWork.PastPlayerInfoRepository.Get(x =>
+            var pastPlayerInfo = _unitOfWork.PastPlayerInfoRepository.GetFirst(x =>
                 x.D_Date.Day == date.Day && x.D_Date.Month == date.Month &&
                 x.I_ApiId == playerInfoEntity.I_ApiId);
                        //x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
-            if (pastPlayerInfo == null)
+            if (pastPlayerInfo.Result == null)
                 return 0;
 
-            return (pastPlayerInfo.I_Point);
+            return (pastPlayerInfo.Result.I_Point);
         }
 
         public int GetWeekWhere(PlayerInfoEntity playerInfoEntity)
@@ -210,9 +210,9 @@ namespace PoolHockeyBLL
         {
             var now = DateTime.Now;
             var exist = _unitOfWork.PastPlayerInfoRepository
-                .Get(
+                .GetFirst(
                     x => x.C_Name == playerInfo.C_Name && x.C_Team == playerInfo.C_Team && x.C_Pos == playerInfo.C_Pos && x.D_Date.Day == now.Day && x.D_Date.Month == now.Month);
-            if (exist == null)
+            if (exist.Result == null)
                 return false;
             return true;
         }

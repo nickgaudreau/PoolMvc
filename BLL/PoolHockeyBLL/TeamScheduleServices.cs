@@ -24,13 +24,13 @@ namespace PoolHockeyBLL
         public bool IsTeamPlaying(string team)
         {
             var date = DateTime.Today;
-            return _unitOfWork.TeamScheduleRepository.Get(x => x.C_Team == team && x.D_Date == date) != null;
+            return _unitOfWork.TeamScheduleRepository.GetFirst(x => x.C_Team == team && x.D_Date == date).Result != null;
         }
 
         public bool WasTeamPlaying(string team)
         {
             var date = DateTime.Today.AddDays(-1);
-            return _unitOfWork.TeamScheduleRepository.Get(x => x.C_Team == team && x.D_Date == date) != null;
+            return _unitOfWork.TeamScheduleRepository.GetFirst(x => x.C_Team == team && x.D_Date == date).Result != null;
         }
 
         public bool Create(TeamSchedule teamSchedule)

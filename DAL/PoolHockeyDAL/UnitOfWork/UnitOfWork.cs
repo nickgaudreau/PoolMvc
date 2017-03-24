@@ -217,7 +217,7 @@ namespace PoolHockeyDAL.UnitOfWork
         {
             try
             {
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
             }
             catch (DbEntityValidationException e)
             {

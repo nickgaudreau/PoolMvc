@@ -29,7 +29,7 @@ namespace PoolHockeyBLL
             UserInfo userInfo;
             try
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetSingle(u => u.C_UserEmail == email);
+                userInfo = _unitOfWork.UserInfoRepository.GetSingle(u => u.C_UserEmail == email).Result;
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace PoolHockeyBLL
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
+                userInfoCache = _unitOfWork.UserInfoRepository.GetAll().Result;
                 _caching.AddToCache("UserInfoGetAll", userInfoCache);
                 userInfoTopDay = userInfoCache.OrderByDescending(u => u.I_BestDay).FirstOrDefault();
                 if (userInfoTopDay == null) return null;
@@ -75,7 +75,7 @@ namespace PoolHockeyBLL
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
+                userInfoCache = _unitOfWork.UserInfoRepository.GetAll().Result;
                 _caching.AddToCache("UserInfoGetAll", userInfoCache);
                 userInfoTopMonth = userInfoCache.OrderByDescending(u => u.I_BestMonth).FirstOrDefault();
                 if (userInfoTopMonth == null) return null;
@@ -99,7 +99,7 @@ namespace PoolHockeyBLL
 
             if (userInfoCache == null)
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetAll();
+                userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
                 _caching.AddToCache("UserInfoGetAll", userInfo);
                 if (!userInfo.Any()) return null;
             }
@@ -185,7 +185,7 @@ namespace PoolHockeyBLL
             {
                 using (var scope = new TransactionScope())
                 {
-                    var userInfo = _unitOfWork.UserInfoRepository.GetByID(code);
+                    var userInfo = _unitOfWork.UserInfoRepository.GetByID(code).Result;
                     if (userInfo == null) return updated;
 
                     // Necessary stats for from NHL API
@@ -236,7 +236,7 @@ namespace PoolHockeyBLL
                 foreach (var userInfo in users)
                 {
                     var userStats = _unitOfWork.PlayerInfoRepository
-                        .GetMany(p => p.C_UserEmail == userInfo.C_UserEmail && p.I_Status != (int)Statuses.Out).ToList();
+                        .GetManyQueryable(p => p.C_UserEmail == userInfo.C_UserEmail && p.I_Status != (int)Statuses.Out);
                     if (!userStats.Any())
                     {
                         LogError.Write(new Exception("Error"), "Could not retrieve user stats for this user info in PlayerInfo Table");
@@ -271,7 +271,7 @@ namespace PoolHockeyBLL
         {
             var playerInfo = _unitOfWork
                 .PlayerInfoRepository
-                .GetManyQueryable(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out).ToList();
+                .GetManyQueryable(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out);
 
 
             var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
@@ -310,7 +310,7 @@ namespace PoolHockeyBLL
 
         public void UpdateBestMonth()
         {
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
 
             foreach (var user in userInfo)
             {
