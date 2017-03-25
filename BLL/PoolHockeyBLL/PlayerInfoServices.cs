@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using AutoMapper;
@@ -13,220 +12,193 @@ using PoolHockeyDAL.UnitOfWork;
 
 namespace PoolHockeyBLL
 {
-    
     public class PlayerInfoServices : IPlayerInfoServices
     {
-        private IUnitOfWork _unitOfWork; // not readonly to be able to dispose and create new context during split bulk save changes
+        private readonly IUnitOfWork _unitOfWork; // 03/25/2017 back to readonly rmeoved see Update():  (to be able to dispose and create new context during split bulk save changes)
         private readonly IPastPlayerInfoServices _pastPlayerInfoServices;
-        //private readonly ITeamScheduleServices _teamScheduleServices;
         private readonly ICaching _caching;
 
-        ///// <summary>
-        ///// For internal use
-        ///// </summary>
-        //internal PlayerInfoServices() { }
-        
         public PlayerInfoServices(UnitOfWork unitOfWork, IPastPlayerInfoServices pastPlayerInfoServices)
         {
-            _unitOfWork = unitOfWork;//new UnitOfWork();
-            _pastPlayerInfoServices = pastPlayerInfoServices;//new PastPlayerInfoServices();
-            //_teamScheduleServices = new TeamScheduleServices();
+            _unitOfWork = unitOfWork;
+            _pastPlayerInfoServices = pastPlayerInfoServices;
             _caching = new Caching();
         }
 
-        /// <summary>
-        /// Fetches PlayerInfo details by code
-        /// </summary>
-        /// <param name="playerInfoCode"></param>
-        /// <returns></returns>
         public PlayerInfoEntity GetById(string playerInfoCode)
         {
             var playerInfo = _unitOfWork.PlayerInfoRepository.GetByID(playerInfoCode).Result;            if (playerInfo == null) return null;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
             var playerInfoEntity = Mapper.Map<PlayerInfo, PlayerInfoEntity>(playerInfo);
-
             return playerInfoEntity;
         }
 
         public IEnumerable<PlayerInfoEntity> GetBestPerRound(int round)
         {
-            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-            
-            if (playerInfoCache != null)
-            {
-                var playerInfo = playerInfoCache;
-                var playerInfoOrderedByRound = playerInfo
-                .Where(x => x.I_Round == round && x.L_Traded == false && x.C_UserEmail != String.Empty)
-                .OrderByDescending(p => p.I_Point)
-                .ThenBy(g => g.I_Game).ToList();
+            List<PlayerInfo> playerInfo = null;
 
-                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoOrderedByRound);
-
-                return playerInfoEntities;
-            }
-
-            var playerInfoOBR = _unitOfWork.PlayerInfoRepository.GetManyQueryable(x => x.I_Round == round && x.L_Traded == false && x.C_UserEmail != String.Empty)
+            var bestPerRound = _unitOfWork.PlayerInfoRepository
+                .GetManyQueryable(x => x.I_Round == round && x.L_Traded == false && x.C_UserEmail != String.Empty)
                 .OrderByDescending(p => p.I_Point)
                 .ThenBy(g => g.I_Game);
+            playerInfo = bestPerRound.ToList();
+            if (!playerInfo.Any())
+            {
+                LogError.Write(new Exception("PlayerInfoServices"), "GetBestPerRound returned 0");
+                return null;
+            }
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoE = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoOBR.ToList());
-
+            var playerInfoE = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoE;
         }
 
-        /// <summary>
-        /// Fetches all PlayerInfo
-        /// </summary>
-        /// <returns></returns>
         public IEnumerable<PlayerInfoEntity> GetAll()
         {
-            // TODO check if in cahce => lookup userInfo.Getall
-            var playerInfos = _unitOfWork.PlayerInfoRepository.GetAll().Result;            if (!playerInfos.Any()) return null; // TODO sghould also log
-            _caching.AddToCache("PlayerInfoGetAll", playerInfos);
+            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
+            List<PlayerInfo> playerInfo = null;
+            if (playerInfoCache == null)
+            {
+                var all = _unitOfWork.PlayerInfoRepository.GetAll().Result;
+                playerInfo = all.ToList();
+                if (!playerInfo.Any())
+                {
+                    LogError.Write(new Exception("PlayerInfoServices"), "PlayerInfoGetAll returned 0");
+                    return null;
+                }
+                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
+            }
+            else
+                playerInfo = playerInfoCache;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfos);
-
+            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoEntities;
+        }
+
+        public IEnumerable<PlayerInfo> GetAllCache()
+        {
+            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
+            List<PlayerInfo> playerInfo = null;
+            if (playerInfoCache == null)
+            {
+                var all = _unitOfWork.PlayerInfoRepository.GetAll().Result;
+                playerInfo = all.ToList();
+                if (!playerInfo.Any())
+                {
+                    LogError.Write(new Exception("PlayerInfoServices"), "PlayerInfoGetAll returned 0");
+                    return null;
+                }
+                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
+            }
+            else
+                playerInfo = playerInfoCache;
+            return playerInfo;
         }
 
         public IEnumerable<PlayerInfoEntity> GetUndrafted()
         {
-            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-            
-            if (playerInfoCache != null)
-            {
-                var playerInfo = playerInfoCache;
+            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("GetUndrafted");
 
-                var allWhere = playerInfo.Where(p => p.C_UserEmail == String.Empty && p.L_Traded == false).ToList();
-                if (!allWhere.Any())
+            List<PlayerInfo> playerInfo = null;
+            if (playerInfoCache == null)
+            {
+                var leagueLeaders = _unitOfWork.PlayerInfoRepository
+                    .GetManyQueryable(p => p.C_UserEmail == String.Empty && p.L_Traded == false)
+                    .OrderByDescending(z => z.I_Point)
+                    .ThenBy(y => y.I_Game)
+                    .Take(50);
+                playerInfo = leagueLeaders.ToList();
+
+                if (!playerInfo.Any())
                 {
                     LogError.Write(new Exception("PlayerInfoServices"), "GetUndrafted returned 0");
                     return null;
                 }
-                var playerInfoWhere = allWhere
-                    .OrderByDescending(z => z.I_Point)
-                    .ThenBy(y => y.I_Game)
-                    .Take(50);
-
-                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere.ToList());
-
-                return playerInfoEntities;
+                _caching.AddToCache("GetUndrafted", playerInfo);
             }
-
-            var playerUndrafted = 
-                _unitOfWork.PlayerInfoRepository
-                .GetManyQueryable(p => p.C_UserEmail == String.Empty && p.L_Traded == false)
-                .OrderByDescending(z => z.I_Point)
-                .ThenBy(y => y.I_Game);
-
-            if (!playerUndrafted.Any())
-            {
-                LogError.Write(new Exception("PlayerInfoServices"), "GetUndrafted returned 0");
-                return null;
-            }
-
-            var playerTop50Undrafted = playerUndrafted.Take(50);
+            else
+                playerInfo = playerInfoCache;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerTop50Undrafted.ToList());
-
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoEs;
         }
 
         public IEnumerable<PlayerInfoEntity> GetLeagueLeaders()
         {
-            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
+            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("GetLeagueLeaders");
 
-            List<PlayerInfo> playerInfo = null; // This one ok as a list since it is not .Tolist() again
+            List<PlayerInfo> playerInfo = null;
             if (playerInfoCache == null)
             {
-                playerInfo = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
-                
-                if (!playerInfo.Any()) return null;
-                _caching.AddToCache("PlayerInfoGetAll", playerInfo);
+                var leagueLeaders = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.L_Traded == false)
+                    .OrderByDescending(z => z.I_Point)
+                    .ThenBy(y => y.I_Game)
+                    .Take(200);
+                playerInfo = leagueLeaders.ToList();
+
+                if (!playerInfo.Any())
+                {
+                    LogError.Write(new Exception("PlayerInfoServices"), "GetLeagueLeaders returned 0");
+                    return null;
+                }
+                _caching.AddToCache("GetLeagueLeaders", playerInfo);
             }
             else
-            {
                 playerInfo = playerInfoCache;
-            }
-
-            var allWhere = playerInfo.Where(p => p.L_Traded == false).ToList();            if (!allWhere.Any())
-            {
-                LogError.Write(new Exception("PlayerInfoServices"), "GetLeagueLeaders returned 0");
-                return null; // TODO sghould also log
-            }
-
-            var playerInfoWhere = allWhere
-                .OrderByDescending(z => z.I_Point)
-                .ThenBy(y => y.I_Game)
-                .Take(200).ToList();
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
-
+            var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoEntities;
         }
 
         public IEnumerable<PlayerInfoEntity> GetInjured()
         {
-            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-            
-            if (playerInfoCache != null)
-            {
-                var playerInfo = playerInfoCache;
+            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("GetInjured");
 
-                var playerInfoWhere = playerInfo.Where(p => p.L_IsInjured == true).ToList();
-                if (!playerInfoWhere.Any())
+            List<PlayerInfo> playerInfo = null;
+            if (playerInfoCache == null)
+            {
+                var injuryList = _unitOfWork.PlayerInfoRepository
+                    .GetManyQueryable(p => p.L_IsInjured == true);
+                playerInfo = injuryList.ToList();
+
+                if (!playerInfo.Any())
                 {
                     LogError.Write(new Exception("PlayerInfoServices"), "GetInjured returned 0");
-                    return null; // TODO sghould also log
+                    return null;
                 }
-
-                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
-
-                return playerInfoEntities;
+                _caching.AddToCache("GetInjured", playerInfo);
             }
-
-            var playerInfoW = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.L_IsInjured == true).ToList();            if (!playerInfoW.Any())
-            {
-                LogError.Write(new Exception("PlayerInfoServices"), "GetInjured returned 0");
-                return null; // TODO sghould also log
-            }
+            else
+                playerInfo = playerInfoCache;
 
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoW);
-
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoEs;
         }
 
+        /// <summary>
+        /// No cache where param
+        /// </summary>
+        /// <param name="userEmail"></param>
+        /// <returns></returns>
         public IEnumerable<PlayerInfoEntity> GetAllWhere(string userEmail)
         {
-            var playerInfoCache = (List<PlayerInfo>)_caching.GetCachedItem("PlayerInfoGetAll");
-
-            
-            if (playerInfoCache != null)
+            List<PlayerInfo> playerInfo = null;
+            var playerInfoWhere = _unitOfWork.PlayerInfoRepository
+                .GetManyQueryable(p => p.C_UserEmail == userEmail && p.L_Traded == false);
+            playerInfo = playerInfoWhere.ToList();
+            if (!playerInfo.Any())
             {
-                var playerInfo = playerInfoCache;
-                var playerInfoWhere = playerInfo.Where(p => p.C_UserEmail == userEmail && p.L_Traded == false).ToList();
-                if (!playerInfoWhere.Any()) return null;
-
-                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-                var playerInfoEntities = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoWhere);
-
-                return playerInfoEntities;
+                LogError.Write(new Exception("PlayerInfoServices"), "PlayerInfoGetAllWhere returned 0");
+                return null;
             }
 
-            var playerInfoW = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_UserEmail == userEmail && p.L_Traded == false).ToList();            if (!playerInfoW.Any()) return null;
-
             Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfoW);
-
+            var playerInfoEs = Mapper.Map<List<PlayerInfo>, List<PlayerInfoEntity>>(playerInfo);
             return playerInfoEs;
         }
 
@@ -324,7 +296,9 @@ namespace PoolHockeyBLL
                 if (playerInfoResult == null)
                 {
                     // create and continue: either new player from minor... or new season
-                    Create(playerInfoEntity); // todo fix the data inserted
+                    playerInfoEntity.C_UserEmail = "";
+                    playerInfoEntity.C_TradedTeam = "";
+                    Create(playerInfoEntity);
                     continue;
                 }
                 try
@@ -447,7 +421,7 @@ namespace PoolHockeyBLL
             {
                 // Save the remainder - no its the team
                 _unitOfWork.Save();
-                _unitOfWork = new UnitOfWork();
+                //_unitOfWork = new UnitOfWork(); // 03/25/2017: removed since we are passing a team at a time. To be monitored by email update
                 updated = true;
             }
             catch (Exception ex)
@@ -461,169 +435,169 @@ namespace PoolHockeyBLL
             return updated;
         }
 
-        
-        public bool UpdateFromMySportsFeeds(IEnumerable<PlayerInfoEntity> playerInfoEntities)
-        {
-            var updated = false;
+        // Not in use
+        //public bool UpdateFromMySportsFeeds(IEnumerable<PlayerInfoEntity> playerInfoEntities)
+        //{
+        //    var updated = false;
 
 
-            foreach (var playerInfoEntity in playerInfoEntities)
-            {
-                // via GEnRepo/UnitOFWork ctx
-                var playerInfo = _unitOfWork.PlayerInfoRepository
-                    .GetFirst(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
+        //    foreach (var playerInfoEntity in playerInfoEntities)
+        //    {
+        //        // via GEnRepo/UnitOFWork ctx
+        //        var playerInfo = _unitOfWork.PlayerInfoRepository
+        //            .GetFirst(x => x.C_Name == playerInfoEntity.C_Name && x.C_Team == playerInfoEntity.C_Team && x.C_Pos == playerInfoEntity.C_Pos);
 
-                var playerInfoResult = playerInfo.Result;
+        //        var playerInfoResult = playerInfo.Result;
 
-                // player does not exist
-                if (playerInfoResult == null)
-                {
-                    // create and continue
-                    // TODO - Will have to find way to track exchange...Same concept. ID stays the same, but stats are split on the different team player stats page
-                    // TODO - will have to do a web scrap to load CBC sport ID. Then if null check for id, if exists add points togheter see section old traded!
-                    playerInfoEntity.C_UserEmail = "";
-                    playerInfoEntity.C_TradedTeam = "";
-                    Create(playerInfoEntity); // todo fix the data inserted
-                    continue;
-                }
-                try
-                {
-                    #region old traded not in use anymore. Check by name/pos/team for unique. if not found then create
-                    //    // #1 Check if player was traded... and only one in DB (meaning newly traded team player not in DB yet - !! 1st update instance since the trade occur!!)
-                    //    // we compare with the only retrive yet in db
-                    //    if (playerInfoEntity.C_Team != playerInfo.C_Team)
-                    //    {
-                    //        // make sure the newly traded team player not in DB yet
-                    //        if (!ExistWithTrade(playerInfoEntity))
-                    //        {
-                    //            // get traded player and user details
-                    //            playerInfoEntity.C_UserEmail = playerInfo.C_UserEmail;
-                    //            playerInfoEntity.I_Round = playerInfo.I_Round;
+        //        // player does not exist
+        //        if (playerInfoResult == null)
+        //        {
+        //            // create and continue
+        //            // TODO - Will have to find way to track exchange...Same concept. ID stays the same, but stats are split on the different team player stats page
+        //            // TODO - will have to do a web scrap to load CBC sport ID. Then if null check for id, if exists add points togheter see section old traded!
+        //            playerInfoEntity.C_UserEmail = "";
+        //            playerInfoEntity.C_TradedTeam = "";
+        //            Create(playerInfoEntity); // todo fix the data inserted
+        //            continue;
+        //        }
+        //        try
+        //        {
+        //            #region old traded not in use anymore. Check by name/pos/team for unique. if not found then create
+        //            //    // #1 Check if player was traded... and only one in DB (meaning newly traded team player not in DB yet - !! 1st update instance since the trade occur!!)
+        //            //    // we compare with the only retrive yet in db
+        //            //    if (playerInfoEntity.C_Team != playerInfo.C_Team)
+        //            //    {
+        //            //        // make sure the newly traded team player not in DB yet
+        //            //        if (!ExistWithTrade(playerInfoEntity))
+        //            //        {
+        //            //            // get traded player and user details
+        //            //            playerInfoEntity.C_UserEmail = playerInfo.C_UserEmail;
+        //            //            playerInfoEntity.I_Round = playerInfo.I_Round;
 
-                    //            playerInfoEntity.I_PtLastD =
-                    //                _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity.I_ApiId);
-                    //            playerInfoEntity.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity.I_ApiId);
-                    //            playerInfoEntity.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity.I_ApiId);
+        //            //            playerInfoEntity.I_PtLastD =
+        //            //                _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity.I_ApiId);
+        //            //            playerInfoEntity.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity.I_ApiId);
+        //            //            playerInfoEntity.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity.I_ApiId);
 
-                    //            Create(playerInfoEntity);
-                    //            //LogError.Write(new ApplicationException("Traded"),
-                    //                //$"This player has been traded {playerInfoEntity.C_Name} to {playerInfoEntity.C_Team} ");
+        //            //            Create(playerInfoEntity);
+        //            //            //LogError.Write(new ApplicationException("Traded"),
+        //            //                //$"This player has been traded {playerInfoEntity.C_Name} to {playerInfoEntity.C_Team} ");
 
-                    //            // update traded previous team player with new team in C_TradedTeam and FLAG has traded
-                    //            playerInfo.C_TradedTeam = playerInfoEntity.C_Team;
-                    //            playerInfo.L_Traded = true;
-                    //            _unitOfWork.PlayerInfoRepository.Update(playerInfo);
-                    //            _unitOfWork.Save(); 
-                    //            continue;
-                    //        }
-
-
-                    //    }
-                    //    // #2 Check if many player then get the one with new team. Then update his stats plus the one from traded player with old team
-                    //    var playerInfoList =
-                    //        _unitOfWork.PlayerInfoRepository.GetMany(p => p.I_ApiId == playerInfoEntity.I_ApiId).ToList();
-                    //    if (playerInfoList.Count > 1)
-                    //    {
-                    //        var tradedPlayer =
-                    //            playerInfoList.FirstOrDefault(x => x.L_Traded == true && x.C_TradedTeam != String.Empty);
-                    //        if (tradedPlayer == null)
-                    //        {
-                    //            LogError.Write(new Exception("Issue in update stats traded"), playerInfoList.ToString());
-                    //            continue;
-                    //        }
-
-                    //        // A) check if the playerInfoEntity passed in is the traded player exit this Update() if it is
-                    //        if (tradedPlayer.C_Team != playerInfoEntity.C_Team)
-                    //            continue;
-
-                    //        // B) otherwise the playerInfo passed in is the new traded player then update his stats
-                    //        var newTeamPlayer =
-                    //            playerInfoList.FirstOrDefault(x => x.L_Traded == false && x.C_TradedTeam == String.Empty);
-                    //        if (newTeamPlayer == null)
-                    //        {
-                    //            LogError.Write(new Exception("Issue in update stats traded"), playerInfoList.ToString());
-                    //            continue;
-                    //        }
-
-                    //        // Meaning: inNewTeamPlayer.I_Game = (newUpdatedData.I_Game + ConstantNoFutureUpdateInDbTradedPlayer.I_Game);
-                    //        // Basically cheating incorrectness of the api to store correct values
+        //            //            // update traded previous team player with new team in C_TradedTeam and FLAG has traded
+        //            //            playerInfo.C_TradedTeam = playerInfoEntity.C_Team;
+        //            //            playerInfo.L_Traded = true;
+        //            //            _unitOfWork.PlayerInfoRepository.Update(playerInfo);
+        //            //            _unitOfWork.Save(); 
+        //            //            continue;
+        //            //        }
 
 
-                    //        newTeamPlayer.I_Game = (playerInfoEntity.I_Game + tradedPlayer.I_Game);
-                    //        newTeamPlayer.I_Goal = (playerInfoEntity.I_Goal + tradedPlayer.I_Goal);
-                    //        newTeamPlayer.I_Assist = (playerInfoEntity.I_Assist + tradedPlayer.I_Assist);
-                    //        newTeamPlayer.I_Point = (playerInfoEntity.I_Point + tradedPlayer.I_Point);
-                    //        newTeamPlayer.C_Toi = playerInfoEntity.C_Toi;
-                    //        newTeamPlayer.I_PpP = (playerInfoEntity.I_PpP + tradedPlayer.I_PpP);
-                    //        newTeamPlayer.I_ShP = (playerInfoEntity.I_ShP + tradedPlayer.I_ShP);
-                    //        newTeamPlayer.I_GwG = (playerInfoEntity.I_GwG + tradedPlayer.I_GwG);
-                    //        newTeamPlayer.I_OtG = (playerInfoEntity.I_OtG + tradedPlayer.I_OtG);
-                    //        newTeamPlayer.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity.I_ApiId
-                    //            /*, newTeamPlayer.I_Point*/);
-                    //        newTeamPlayer.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity.I_ApiId
-                    //            /*, newTeamPlayer.I_Point*/);
-                    //        newTeamPlayer.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity.I_ApiId
-                    //            /*, newTeamPlayer.I_Point*/);
-                    //        //newTeamPlayer.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
-                    //        _unitOfWork.PlayerInfoRepository.Update(newTeamPlayer);//_bulkCtxEntities.Entry(newTeamPlayer).State = EntityState.Modified;//
-                    //        _unitOfWork.Save();//_bulkCtxEntities.SaveChanges();//
+        //            //    }
+        //            //    // #2 Check if many player then get the one with new team. Then update his stats plus the one from traded player with old team
+        //            //    var playerInfoList =
+        //            //        _unitOfWork.PlayerInfoRepository.GetMany(p => p.I_ApiId == playerInfoEntity.I_ApiId).ToList();
+        //            //    if (playerInfoList.Count > 1)
+        //            //    {
+        //            //        var tradedPlayer =
+        //            //            playerInfoList.FirstOrDefault(x => x.L_Traded == true && x.C_TradedTeam != String.Empty);
+        //            //        if (tradedPlayer == null)
+        //            //        {
+        //            //            LogError.Write(new Exception("Issue in update stats traded"), playerInfoList.ToString());
+        //            //            continue;
+        //            //        }
 
-                    //        //updated = true;
-                    //        continue;
-                    //    }
+        //            //        // A) check if the playerInfoEntity passed in is the traded player exit this Update() if it is
+        //            //        if (tradedPlayer.C_Team != playerInfoEntity.C_Team)
+        //            //            continue;
 
-                    #endregion
-                    // Necessary stats for from NHL API
-                    playerInfoResult.I_Game = playerInfoEntity.I_Game;
-                    playerInfoResult.I_Goal = playerInfoEntity.I_Goal;
-                    playerInfoResult.I_Assist = playerInfoEntity.I_Assist;
-                    playerInfoResult.I_Point = playerInfoEntity.I_Point;
-                    playerInfoResult.C_Toi = playerInfoEntity.C_Toi;
-                    playerInfoResult.I_PpP = playerInfoEntity.I_PpP;
-                    playerInfoResult.I_ShP = playerInfoEntity.I_ShP;
+        //            //        // B) otherwise the playerInfo passed in is the new traded player then update his stats
+        //            //        var newTeamPlayer =
+        //            //            playerInfoList.FirstOrDefault(x => x.L_Traded == false && x.C_TradedTeam == String.Empty);
+        //            //        if (newTeamPlayer == null)
+        //            //        {
+        //            //            LogError.Write(new Exception("Issue in update stats traded"), playerInfoList.ToString());
+        //            //            continue;
+        //            //        }
 
-                    // removed with Scarpping
-                    //playerInfoResult.I_GwG = playerInfoEntity.I_GwG;
-                    //playerInfoResult.I_OtG = playerInfoEntity.I_OtG;
-
-                    playerInfoResult.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
-                    playerInfoResult.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
-                    playerInfoResult.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
-                    //playerInfoResult.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
-
-                    _unitOfWork.PlayerInfoRepository.Update(playerInfoResult);
+        //            //        // Meaning: inNewTeamPlayer.I_Game = (newUpdatedData.I_Game + ConstantNoFutureUpdateInDbTradedPlayer.I_Game);
+        //            //        // Basically cheating incorrectness of the api to store correct values
 
 
-                }
-                catch (ApplicationException ex)
-                {
-                    LogError.Write(ex,
-                        $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
-                }
-                catch (Exception ex)
-                {
-                    LogError.Write(ex,
-                        $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
-                }
-            }
+        //            //        newTeamPlayer.I_Game = (playerInfoEntity.I_Game + tradedPlayer.I_Game);
+        //            //        newTeamPlayer.I_Goal = (playerInfoEntity.I_Goal + tradedPlayer.I_Goal);
+        //            //        newTeamPlayer.I_Assist = (playerInfoEntity.I_Assist + tradedPlayer.I_Assist);
+        //            //        newTeamPlayer.I_Point = (playerInfoEntity.I_Point + tradedPlayer.I_Point);
+        //            //        newTeamPlayer.C_Toi = playerInfoEntity.C_Toi;
+        //            //        newTeamPlayer.I_PpP = (playerInfoEntity.I_PpP + tradedPlayer.I_PpP);
+        //            //        newTeamPlayer.I_ShP = (playerInfoEntity.I_ShP + tradedPlayer.I_ShP);
+        //            //        newTeamPlayer.I_GwG = (playerInfoEntity.I_GwG + tradedPlayer.I_GwG);
+        //            //        newTeamPlayer.I_OtG = (playerInfoEntity.I_OtG + tradedPlayer.I_OtG);
+        //            //        newTeamPlayer.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity.I_ApiId
+        //            //            /*, newTeamPlayer.I_Point*/);
+        //            //        newTeamPlayer.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity.I_ApiId
+        //            //            /*, newTeamPlayer.I_Point*/);
+        //            //        newTeamPlayer.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity.I_ApiId
+        //            //            /*, newTeamPlayer.I_Point*/);
+        //            //        //newTeamPlayer.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
+        //            //        _unitOfWork.PlayerInfoRepository.Update(newTeamPlayer);//_bulkCtxEntities.Entry(newTeamPlayer).State = EntityState.Modified;//
+        //            //        _unitOfWork.Save();//_bulkCtxEntities.SaveChanges();//
 
-            try
-            {
-                // Save the remainder - no its the team
-                _unitOfWork.Save();
-                _unitOfWork = new UnitOfWork();
-                updated = true;
-            }
-            catch (Exception ex)
-            {
-                LogError.Write(ex,
-                        "Exception in PlayerInfoServices.Update(IEnumerable<PlayerInfoEntity> playerInfoEntities)()  on Save ALL to Context");
-                updated = false;
-                return updated;
-            }
+        //            //        //updated = true;
+        //            //        continue;
+        //            //    }
 
-            return updated;
-        }
+        //            #endregion
+        //            // Necessary stats for from NHL API
+        //            playerInfoResult.I_Game = playerInfoEntity.I_Game;
+        //            playerInfoResult.I_Goal = playerInfoEntity.I_Goal;
+        //            playerInfoResult.I_Assist = playerInfoEntity.I_Assist;
+        //            playerInfoResult.I_Point = playerInfoEntity.I_Point;
+        //            playerInfoResult.C_Toi = playerInfoEntity.C_Toi;
+        //            playerInfoResult.I_PpP = playerInfoEntity.I_PpP;
+        //            playerInfoResult.I_ShP = playerInfoEntity.I_ShP;
+
+        //            // removed with Scarpping
+        //            //playerInfoResult.I_GwG = playerInfoEntity.I_GwG;
+        //            //playerInfoResult.I_OtG = playerInfoEntity.I_OtG;
+
+        //            playerInfoResult.I_PtLastD = _pastPlayerInfoServices.GetYesterdayWhere(playerInfoEntity);
+        //            playerInfoResult.I_PtLastW = _pastPlayerInfoServices.GetWeekWhere(playerInfoEntity);
+        //            playerInfoResult.I_PtLastM = _pastPlayerInfoServices.GetMonthWhere(playerInfoEntity);
+        //            //playerInfoResult.L_IsPlaying = _teamScheduleServices.IsTeamPlaying(playerInfoEntity.C_Team);
+
+        //            _unitOfWork.PlayerInfoRepository.Update(playerInfoResult);
+
+
+        //        }
+        //        catch (ApplicationException ex)
+        //        {
+        //            LogError.Write(ex,
+        //                $"ApplicationException in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            LogError.Write(ex,
+        //                $"Exception in PlayerInfoServices.Create(IEnumerable<PlayerInfoEntity> playerInfoEntities)() for id: {playerInfoResult.C_Name} and code: {playerInfoResult.C_Code}");
+        //        }
+        //    }
+
+        //    try
+        //    {
+        //        // Save the remainder - no its the team
+        //        _unitOfWork.Save();
+        //        _unitOfWork = new UnitOfWork();
+        //        updated = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogError.Write(ex,
+        //                "Exception in PlayerInfoServices.Update(IEnumerable<PlayerInfoEntity> playerInfoEntities)()  on Save ALL to Context");
+        //        updated = false;
+        //        return updated;
+        //    }
+
+        //    return updated;
+        //}
 
         public bool UpdateAvg()
         {
@@ -653,8 +627,6 @@ namespace PoolHockeyBLL
             return true;
         }
 
-
-        // @@@@ Just use same query to exec all 3 uptate
         public bool UpdateStatus()
         {
             _unitOfWork.ClearAllStatus();
@@ -711,7 +683,6 @@ namespace PoolHockeyBLL
                     LogError.Write(ex, "Exception in UpdateStatus at top round: " + i);
                 }
             }
-
             //Statuses.Worst = 2, check if for a given user if one of his picks is worst of round
             for (int i = 1; i <= Constants.Rules.Rounds; i++)
             {
@@ -742,7 +713,7 @@ namespace PoolHockeyBLL
 
             _unitOfWork.ClearAllInjuryStatus();
             var injuryList = InjuredApiTransactions.GetInjuredList().ToList();
-            var playerInfoEntities = _unitOfWork.PlayerInfoRepository.GetAll().ToList();
+            var playerInfoEntities = _unitOfWork.PlayerInfoRepository.GetAll().Result.ToList(); // Better to query all before it enter the loop, anyway linQ.First.. would force to query immediately
 
             foreach (var injured in injuryList)
             {
@@ -767,10 +738,7 @@ namespace PoolHockeyBLL
             return updated;
         }
 
-        public bool Delete(string playerInfoCode)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Delete(string playerInfoCode) { throw new NotImplementedException(); }
 
         public bool Exist(PlayerInfoEntity playerInfoEntity)
         {

@@ -14,13 +14,8 @@ namespace PoolHockeyBLL
     /// </summary>
     public class PastPlayerInfoServices : IPastPlayerInfoServices
     {
-        private IUnitOfWork _unitOfWork;
-
-        ///// <summary>
-        ///// For  internal instantiation 
-        ///// </summary>
-        //internal PastPlayerInfoServices() { }
-
+        private readonly IUnitOfWork _unitOfWork;
+        
         // DI
         public PastPlayerInfoServices(UnitOfWork unitOfWork)
         {
@@ -132,13 +127,15 @@ namespace PoolHockeyBLL
         {
             var dateToStore = DateTime.Now.AddDays(-1);
 
-            var listPlayerInfoForTeam = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_Team == playerInfoEntities.ElementAt(0).C_Team);
+            var playerInfoTeamList = playerInfoEntities.ToList();
+
+            var listPlayerInfoForTeam = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_Team == playerInfoTeamList.ElementAt(0).C_Team);
 
             var listPastPlayerInfoYesterdayForTeam =
-                _unitOfWork.PastPlayerInfoRepository.GetManyQueryable(x => x.D_Date == dateToStore && x.C_Team == playerInfoEntities.ElementAt(0).C_Team);
+                _unitOfWork.PastPlayerInfoRepository.GetManyQueryable(x => x.D_Date == dateToStore && x.C_Team == playerInfoTeamList.ElementAt(0).C_Team);
 
 
-            foreach (var playerInfoEntity in playerInfoEntities)
+            foreach (var playerInfoEntity in playerInfoTeamList)
             {
                 // list with param team check if apiId is in with data for yesterday if so skip (coded that way in case 2 update would occur in one day)
                 var exist =
@@ -161,7 +158,7 @@ namespace PoolHockeyBLL
                     if (lastDayPoints <= 0) // no need to store 0 points... when geet foir stats if null = skip or return 0 anyway
                         continue;
 
-                    if (playerInfoEntities.ElementAt(0).C_Team == "PIT")
+                    if (playerInfoTeamList.ElementAt(0).C_Team == "PIT")
                     {
                         var x = "";
                     }
@@ -194,7 +191,7 @@ namespace PoolHockeyBLL
             try
             {
                 _unitOfWork.Save();
-                _unitOfWork = new UnitOfWork();
+                //_unitOfWork = new UnitOfWork();
             }
             catch (Exception e)
             {

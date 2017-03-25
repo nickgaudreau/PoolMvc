@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using PoolHockeyBLL.Api;
-using PoolHockeyBLL.ApiModels;
-using PoolHockeyBLL.ApiModels.EN;
 using PoolHockeyBLL.Contracts;
 using PoolHockeyBLL.Log;
 using PoolHockeyBLL.ViewModels;
-using ScrapySharp.Extensions;
 
 namespace PoolHockeyBLL
 {

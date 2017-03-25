@@ -11,14 +11,9 @@ namespace PoolHockeyBLL
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        ///// <summary>
-        ///// For internal use
-        ///// </summary>
-        //internal TeamScheduleServices() {  }
-
         public TeamScheduleServices(UnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork; //new UnitOfWork();
+            _unitOfWork = unitOfWork; 
         }
 
         public bool IsTeamPlaying(string team)
@@ -40,9 +35,6 @@ namespace PoolHockeyBLL
             {
                 using (var scope = new TransactionScope())
                 {
-                    //Mapper.CreateMap<UserInfoEntity, UserInfo>();
-                    //var userInfo = Mapper.Map<UserInfoEntity, UserInfo>(userInfoEntity);
-
                     _unitOfWork.TeamScheduleRepository.Insert(teamSchedule);
                     _unitOfWork.Save();
                     scope.Complete();

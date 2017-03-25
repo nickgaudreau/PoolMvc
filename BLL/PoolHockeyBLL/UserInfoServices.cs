@@ -96,12 +96,15 @@ namespace PoolHockeyBLL
             var userInfoCache = (IEnumerable<UserInfo>)_caching.GetCachedItem("UserInfoGetAll");
 
             IEnumerable<UserInfo> userInfo = null;
-
             if (userInfoCache == null)
             {
                 userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
+                if (!userInfo.Any())
+                {
+                    LogError.Write(new Exception("UserInfoServices"), "GetAll returned 0");
+                    return null;
+                }
                 _caching.AddToCache("UserInfoGetAll", userInfo);
-                if (!userInfo.Any()) return null;
             }
             else
             {
@@ -117,10 +120,10 @@ namespace PoolHockeyBLL
         // not in use..
         public IEnumerable<UserInfoEntity> GetAllWhere(string userEmail)
         {
-            var userInfos = _unitOfWork.UserInfoRepository.GetManyQueryable(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
+            var userInfos = _unitOfWork.UserInfoRepository.GetManyQueryable(u => u.C_UserEmail == userEmail);            if (!userInfos.Any()) return null;
 
             Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos);
+            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos.ToList());
 
             return userInfoEntities;
         }
@@ -177,6 +180,12 @@ namespace PoolHockeyBLL
             return created;
         }
 
+        /// <summary>
+        /// Cron method - no chahce
+        /// </summary>
+        /// <param name="userInfoEntity"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public bool Update(UserInfoEntity userInfoEntity, string code)
         {
             var updated = false;
@@ -221,6 +230,10 @@ namespace PoolHockeyBLL
             return updated;
         }
 
+        /// <summary>
+        /// Cron method - no cache used
+        /// </summary>
+        /// <returns></returns>
         public bool UpdateAll()
         {
             var updated = false;
@@ -267,6 +280,9 @@ namespace PoolHockeyBLL
             return updated;
         }
 
+        /// <summary>
+        /// Cron method
+        /// </summary>
         public void UpdateBestDay()
         {
             var playerInfo = _unitOfWork
@@ -274,7 +290,7 @@ namespace PoolHockeyBLL
                 .GetManyQueryable(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out);
 
 
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
+            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result; // dont use cache here
 
             foreach (var user in userInfo)
             {
@@ -308,6 +324,9 @@ namespace PoolHockeyBLL
 
         }
 
+        /// <summary>
+        /// Cron method
+        /// </summary>
         public void UpdateBestMonth()
         {
             var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
@@ -343,11 +362,6 @@ namespace PoolHockeyBLL
             }
         }
 
-        public bool Delete(string userInfoCode)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        public bool Delete(string userInfoCode){throw new NotImplementedException();}
     }
 }

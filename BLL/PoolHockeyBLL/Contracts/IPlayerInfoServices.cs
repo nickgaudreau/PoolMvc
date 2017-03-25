@@ -14,7 +14,7 @@ namespace PoolHockeyBLL.Contracts
         IEnumerable<PlayerInfoEntity> GetInjured();
         IEnumerable<PlayerInfoEntity> GetBestPerRound(int round);        IEnumerable<PlayerInfoEntity> GetAllWhere(string userEmail);        bool Create(PlayerInfoEntity playerInfoEntity);
         bool CreateList(List<PlayerInfoEntity> playerInfoEntities);        bool Update(IEnumerable<PlayerInfoEntity> playerInfoEntities);
-        bool UpdateFromMySportsFeeds(IEnumerable<PlayerInfoEntity> playerInfoEntities);
+        //bool UpdateFromMySportsFeeds(IEnumerable<PlayerInfoEntity> playerInfoEntities);
         bool UpdateAvg();
         bool UpdateStatus();
         bool UpdateInjuryStatus();        bool Delete(string playerInfoCode);
