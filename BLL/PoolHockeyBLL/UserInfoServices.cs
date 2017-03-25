@@ -29,7 +29,7 @@ namespace PoolHockeyBLL
             UserInfo userInfo;
             try
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetSingle(u => u.C_UserEmail == email);
+                userInfo = _unitOfWork.UserInfoRepository.GetSingle(u => u.C_UserEmail == email).Result;
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace PoolHockeyBLL
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
+                userInfoCache = _unitOfWork.UserInfoRepository.GetAll().Result;
                 _caching.AddToCache("UserInfoGetAll", userInfoCache);
                 userInfoTopDay = userInfoCache.OrderByDescending(u => u.I_BestDay).FirstOrDefault();
                 if (userInfoTopDay == null) return null;
@@ -75,7 +75,7 @@ namespace PoolHockeyBLL
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
+                userInfoCache = _unitOfWork.UserInfoRepository.GetAll().Result;
                 _caching.AddToCache("UserInfoGetAll", userInfoCache);
                 userInfoTopMonth = userInfoCache.OrderByDescending(u => u.I_BestMonth).FirstOrDefault();
                 if (userInfoTopMonth == null) return null;
@@ -96,12 +96,15 @@ namespace PoolHockeyBLL
             var userInfoCache = (IEnumerable<UserInfo>)_caching.GetCachedItem("UserInfoGetAll");
 
             IEnumerable<UserInfo> userInfo = null;
-
             if (userInfoCache == null)
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetAll();
+                userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
+                if (!userInfo.Any())
+                {
+                    LogError.Write(new Exception("UserInfoServices"), "GetAll returned 0");
+                    return null;
+                }
                 _caching.AddToCache("UserInfoGetAll", userInfo);
-                if (!userInfo.Any()) return null;
             }
             else
             {
@@ -117,10 +120,10 @@ namespace PoolHockeyBLL
         // not in use..
         public IEnumerable<UserInfoEntity> GetAllWhere(string userEmail)
         {
-            var userInfos = _unitOfWork.UserInfoRepository.GetMany(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
+            var userInfos = _unitOfWork.UserInfoRepository.GetManyQueryable(u => u.C_UserEmail == userEmail);            if (!userInfos.Any()) return null;
 
             Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos);
+            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos.ToList());
 
             return userInfoEntities;
         }
@@ -128,7 +131,7 @@ namespace PoolHockeyBLL
         // not in contract
         internal int GetMonthlyPointsForUser(string usermail)
         {
-            var playerInfo = _unitOfWork.PlayerInfoRepository.GetMany(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
+            var playerInfo = _unitOfWork.PlayerInfoRepository.GetManyQueryable(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
             //var date = DateTime.Now;
 
             var total = 0;
@@ -177,6 +180,12 @@ namespace PoolHockeyBLL
             return created;
         }
 
+        /// <summary>
+        /// Cron method - no chahce
+        /// </summary>
+        /// <param name="userInfoEntity"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public bool Update(UserInfoEntity userInfoEntity, string code)
         {
             var updated = false;
@@ -185,7 +194,7 @@ namespace PoolHockeyBLL
             {
                 using (var scope = new TransactionScope())
                 {
-                    var userInfo = _unitOfWork.UserInfoRepository.GetByID(code);
+                    var userInfo = _unitOfWork.UserInfoRepository.GetByID(code).Result;
                     if (userInfo == null) return updated;
 
                     // Necessary stats for from NHL API
@@ -221,13 +230,17 @@ namespace PoolHockeyBLL
             return updated;
         }
 
+        /// <summary>
+        /// Cron method - no cache used
+        /// </summary>
+        /// <returns></returns>
         public bool UpdateAll()
         {
             var updated = false;
 
             try
             {
-                var users = _unitOfWork.UserInfoRepository.GetAll().ToList();
+                var users = _unitOfWork.UserInfoRepository.GetAll().Result;
                 if (!users.Any())
                 {
                     LogError.Write(new Exception("Error"), "UserInfo Get all returned 0 values");
@@ -236,7 +249,7 @@ namespace PoolHockeyBLL
                 foreach (var userInfo in users)
                 {
                     var userStats = _unitOfWork.PlayerInfoRepository
-                        .GetMany(p => p.C_UserEmail == userInfo.C_UserEmail && p.I_Status != (int)Statuses.Out).ToList();
+                        .GetManyQueryable(p => p.C_UserEmail == userInfo.C_UserEmail && p.I_Status != (int)Statuses.Out);
                     if (!userStats.Any())
                     {
                         LogError.Write(new Exception("Error"), "Could not retrieve user stats for this user info in PlayerInfo Table");
@@ -267,15 +280,17 @@ namespace PoolHockeyBLL
             return updated;
         }
 
+        /// <summary>
+        /// Cron method
+        /// </summary>
         public void UpdateBestDay()
         {
             var playerInfo = _unitOfWork
                 .PlayerInfoRepository
-                .GetMany(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out)
-                .ToList();
+                .GetManyQueryable(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out);
 
 
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result; // dont use cache here
 
             foreach (var user in userInfo)
             {
@@ -309,9 +324,12 @@ namespace PoolHockeyBLL
 
         }
 
+        /// <summary>
+        /// Cron method
+        /// </summary>
         public void UpdateBestMonth()
         {
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.UserInfoRepository.GetAll().Result;
 
             foreach (var user in userInfo)
             {
@@ -344,11 +362,6 @@ namespace PoolHockeyBLL
             }
         }
 
-        public bool Delete(string userInfoCode)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        public bool Delete(string userInfoCode){throw new NotImplementedException();}
     }
 }

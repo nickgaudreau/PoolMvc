@@ -11,26 +11,21 @@ namespace PoolHockeyBLL
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        ///// <summary>
-        ///// For internal use
-        ///// </summary>
-        //internal TeamScheduleServices() {  }
-
         public TeamScheduleServices(UnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork; //new UnitOfWork();
+            _unitOfWork = unitOfWork; 
         }
 
         public bool IsTeamPlaying(string team)
         {
             var date = DateTime.Today;
-            return _unitOfWork.TeamScheduleRepository.Get(x => x.C_Team == team && x.D_Date == date) != null;
+            return _unitOfWork.TeamScheduleRepository.GetFirst(x => x.C_Team == team && x.D_Date == date).Result != null;
         }
 
         public bool WasTeamPlaying(string team)
         {
             var date = DateTime.Today.AddDays(-1);
-            return _unitOfWork.TeamScheduleRepository.Get(x => x.C_Team == team && x.D_Date == date) != null;
+            return _unitOfWork.TeamScheduleRepository.GetFirst(x => x.C_Team == team && x.D_Date == date).Result != null;
         }
 
         public bool Create(TeamSchedule teamSchedule)
@@ -40,9 +35,6 @@ namespace PoolHockeyBLL
             {
                 using (var scope = new TransactionScope())
                 {
-                    //Mapper.CreateMap<UserInfoEntity, UserInfo>();
-                    //var userInfo = Mapper.Map<UserInfoEntity, UserInfo>(userInfoEntity);
-
                     _unitOfWork.TeamScheduleRepository.Insert(teamSchedule);
                     _unitOfWork.Save();
                     scope.Complete();
@@ -73,7 +65,7 @@ namespace PoolHockeyBLL
         {
 
             var updated = false;
-            var teamPlayingToday = _unitOfWork.TeamScheduleRepository.GetMany(x => x.D_Date == DateTime.Today);
+            var teamPlayingToday = _unitOfWork.TeamScheduleRepository.GetManyQueryable(x => x.D_Date == DateTime.Today);
             _unitOfWork.ClearPlayingToday();
             foreach (var team in teamPlayingToday)
             {

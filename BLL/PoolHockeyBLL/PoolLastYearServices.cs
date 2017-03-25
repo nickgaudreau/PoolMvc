@@ -10,13 +10,12 @@ namespace PoolHockeyBLL
 {
     public class PoolLastYearServices : IPoolLastYearServices
     {
-
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICaching _caching;
 
         public PoolLastYearServices(UnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;//new UnitOfWork();
+            _unitOfWork = unitOfWork;
             _caching = new Caching();
         }
 
@@ -28,9 +27,9 @@ namespace PoolHockeyBLL
 
             if (pastPoolInfoCache == null)
             {
-                pastPoolInfo = _unitOfWork.PoolLastYearRepository.GetAll();
-                _caching.AddToCache("PastPoolInfoGetAll", pastPoolInfo);
+                pastPoolInfo = _unitOfWork.PoolLastYearRepository.GetAll().Result;
                 if (!pastPoolInfo.Any()) return null;
+                _caching.AddToCache("PastPoolInfoGetAll", pastPoolInfo);
             }
             else
             {
