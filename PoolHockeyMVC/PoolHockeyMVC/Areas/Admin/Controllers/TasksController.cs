@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Web.Mvc;
 using PoolHockeyBLL;
 using PoolHockeyBLL.Api;
@@ -28,58 +27,6 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
             _configServices = configServices;//new ConfigServices();
         }
 
-        public ActionResult MainCronTask()
-        {
-            // CLear all chaches
-            Caching.ClearAllCaches();
-
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            // Update Db form api
-            new NhlApiTransactions(_playerInfoServices, _pastPlayerInfoServices).UpDbSeason();
-            // check?
-
-            time.Stop();
-            Debug.WriteLine("Time:" + time.Elapsed);
-
-            //// update status must be before userInfo update all
-            time.Reset();
-            time.Start();
-            _playerInfoServices.UpdateStatus();
-
-            _playerInfoServices.UpdateAvg();
-
-            _playerInfoServices.UpdateInjuryStatus();
-
-            //////// update user stats
-
-            _userInfoServices.UpdateAll();
-            //////// check
-
-            _userInfoServices.UpdateBestMonth();
-
-            //// best day must be call last after all other updates
-            Caching.ClearAllCaches();
-            _userInfoServices.UpdateBestDay();
-
-
-            // UPdate playing today
-            _teamScheduleServices.Update();
-
-            // set last update time
-            _configServices.SetLastUpdate(DateTime.Now);
-
-            time.Stop();
-            Debug.WriteLine("Time:" + time.Elapsed);
-
-            // This is just run 4-5 times per year to fill DB (NHL API release 2 months ahead...)
-            //new TeamScheduleApiTransactions().UpdateTeamSchedule();
-
-            Caching.ClearAllCaches();
-
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
         public ActionResult ClearCache()
         {
             // CLear all chaches
@@ -88,95 +35,11 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 
-        
-
-        public ActionResult MailTest()
-        {
-            var message = $"Mail Test. Total time: 99:99:99";
-            var subject = "Daily Update - TEST";
-            MailUtility.SendMail(message, subject);
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
-
-        public ActionResult CronTeamSchedApi()
-        {
-            // CLear all chaches
-            Caching.ClearAllCaches();
-            // now this way ran once annually
-            //new TeamScheduleApiTransactions().SaveSchedule();
-
-            // UPdate playing today
-            //_teamScheduleServices.Update();
-
-            // CLear all chaches
-            Caching.ClearAllCaches();
-            
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
-        public ActionResult WebScrappingTest()
-        {
-            //for (int i = 1; i <= PoolHockeyBLL.Constants.Teams.SeasonWebScrappingDict.Count; i++)
-            //{
-            //    NhlWebScrapingApiTransactions.GetTeamPlayerData(i);
-            //}
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
-        public ActionResult MySportsFeedTest()
-        {
-            MySportsFeedApiTransactions.TestWithJsonFile();
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
-        public ActionResult UpdateStatsOnly()
-        {
-            // CLear all chaches
-            Caching.ClearAllCaches();
-
-            Stopwatch time = new Stopwatch();
-            time.Start();
-
-            _playerInfoServices.UpdateStatus();
-
-            _playerInfoServices.UpdateAvg();
-
-            _playerInfoServices.UpdateInjuryStatus();
-
-            //////// update user stats
-
-            _userInfoServices.UpdateAll();
-            //////// check
-
-            _userInfoServices.UpdateBestMonth();
-
-            //// best day must be call last after all other updates
-            Caching.ClearAllCaches();
-            _userInfoServices.UpdateBestDay();
-
-
-            // UPdate playing today
-            //_teamScheduleServices.Update();
-
-            // set last update time
-            _configServices.SetLastUpdate(DateTime.Now);
-
-            time.Stop();
-            Debug.WriteLine("Time:" + time.Elapsed);
-
-            // This is just run 4-5 times per year to fill DB (NHL API release 2 months ahead...)
-            //new TeamScheduleApiTransactions().UpdateTeamSchedule();
-
-            Caching.ClearAllCaches();
-
-            return RedirectToAction("Index", "Home", new { Area = "Common" });
-        }
-
         /// <summary>
-        /// One off. Create / fill PlayerInfo
+        /// One off. Create / fill PlayerInfo - dangerous
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         public ActionResult CreateAllPlayerInfo()
         {
             Caching.ClearAllCaches();
@@ -190,9 +53,9 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            Debug.WriteLine("CreateAllPlayerInfo time: " + timer.Elapsed);
+            //Debug.WriteLine("CreateAllPlayerInfo time: " + timer.Elapsed);
             // For PROD only
-            //SendMessage("DailyPastStatsFiller", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            SendMessage("DailyPastStatsFiller", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
         /// <summary>
@@ -203,7 +66,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-            
+
             //Update player info
             _playerInfoServices.UpdateStatus();
             _playerInfoServices.UpdateAvg();
@@ -222,9 +85,9 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            Debug.WriteLine("PlayerUserStatsUpdater time: " + timer.Elapsed);
+            //Debug.WriteLine("PlayerUserStatsUpdater time: " + timer.Elapsed);
             // For PROD only
-            // SendMessage("FrequentPlayerUserStatsUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            SendMessage("FrequentPlayerUserStatsUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 
@@ -246,9 +109,9 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            Debug.WriteLine("DailyPastStatsFiller time: " + timer.Elapsed);
+            //Debug.WriteLine("DailyPastStatsFiller time: " + timer.Elapsed);
             // For PROD only
-            //SendMessage("DailyPastStatsFiller", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            SendMessage("DailyPastStatsFiller", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 
@@ -286,13 +149,11 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
+            //Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
             // For PROD only
-            // SendMessage("DailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            SendMessage("DailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
-
-
 
         public ActionResult FrequentPlayerUserStatsUpdater()
         {
@@ -310,20 +171,18 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             // Update UserIfo Table
             _userInfoServices.UpdateAll();
-            _userInfoServices.UpdateBestMonth();
-            _userInfoServices.UpdateBestDay(); //// best day must be call last after all other updates
+            //_userInfoServices.UpdateBestMonth(); // no need to be frequent
+            //_userInfoServices.UpdateBestDay(); // no need to be frequent // best day must be call last after all other updates
 
             // Update TeamSchedule table -> who play today
-            _teamScheduleServices.Update();
+            //_teamScheduleServices.Update(); // no need to be frequent - daily
 
             // Udpate Config Table - set last update time -> NOW
             _configServices.SetLastUpdate(DateTime.Now);
 
             Caching.ClearAllCaches();
-            // for DEBUG only
-            Debug.WriteLine("FrequentPlayerUserStatsUpdater time: " + timer.Elapsed);
             // For PROD only
-            // SendMessage("FrequentPlayerUserStatsUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            SendMessage("FrequentPlayerUserStatsUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 

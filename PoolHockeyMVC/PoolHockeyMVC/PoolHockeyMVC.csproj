@@ -403,6 +403,7 @@
     <Content Include="theme\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="theme\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Views\Shared\_ThemeLayout.cshtml" />
+    <None Include="Web.Prod.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
