@@ -160,9 +160,9 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            //Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
+            Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
             // For PROD only
-            SendMessage("DailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            //SendMessage("DailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             HttpRuntime.UnloadAppDomain(); // hardcore clear app recycle!
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
@@ -202,9 +202,9 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
 
             Caching.ClearAllCaches();
             // for DEBUG only
-            //Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
+            Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
             // For PROD only
-            SendMessage("PlayoffDailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            //SendMessage("PlayoffDailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
             HttpRuntime.UnloadAppDomain(); // hardcore clear app recycle!
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
