@@ -49,15 +49,6 @@
                         configured size limit, ASP.NET returns an HTTP 400 (Bad Request) status code. This setting is for ASP.NET while the requestLimits 
                         maxUrl setting is for IIS, you need to set both to the same value. -->
     <httpRuntime executionTimeout="30" maxQueryStringLength="2048" maxRequestLength="1024" maxUrlLength="260" targetFramework="4.5.2" enableVersionHeader="false" />
-    <caching>
-      <outputCacheSettings>
-        <outputCacheProfiles>
-          <add name="Long" duration="120"/>
-          <add name="Short" duration="3"/>
-        </outputCacheProfiles>
-      </outputCacheSettings>
-    </caching>
-
   </system.web>
   <system.webServer>
     <modules>
@@ -300,7 +291,7 @@
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+        <bindingRedirect oldVersion="1.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />

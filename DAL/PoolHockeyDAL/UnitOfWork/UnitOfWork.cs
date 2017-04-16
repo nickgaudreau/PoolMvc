@@ -21,6 +21,8 @@ namespace PoolHockeyDAL.UnitOfWork
         private GenericRepository<PastPlayerInfo> _pastPlayerInfoRepository;
         private GenericRepository<PoolLastYear> _poolLastYearRepository;
         private GenericRepository<TeamSchedule> _teamScheduleRepository;
+        private GenericRepository<PlayoffPlayerInfo> _playoffPlayerInfoRepository;
+        private GenericRepository<PlayoffUserInfo> _playoffUserInfoRepository;
         #endregion
         public UnitOfWork()
         {
@@ -101,6 +103,33 @@ namespace PoolHockeyDAL.UnitOfWork
                 if (this._teamScheduleRepository == null)
                     this._teamScheduleRepository = new GenericRepository<TeamSchedule>(_context);
                 return _teamScheduleRepository;
+            }
+        }
+
+
+        /// <summary>
+        /// Get/Set Property for PlayoffPlayerInfo repository.
+        /// </summary>
+        public GenericRepository<PlayoffPlayerInfo> PlayoffPlayerInfoRepository
+        {
+            get
+            {
+                if (this._playoffPlayerInfoRepository == null)
+                    this._playoffPlayerInfoRepository = new GenericRepository<PlayoffPlayerInfo>(_context);
+                return _playoffPlayerInfoRepository;
+            }
+        }
+
+        /// <summary>
+        /// Get/Set Property for playoff UserInfo repository.
+        /// </summary>
+        public GenericRepository<PlayoffUserInfo> PlayoffUserInfoRepository
+        {
+            get
+            {
+                if (this._playoffUserInfoRepository == null)
+                    this._playoffUserInfoRepository = new GenericRepository<PlayoffUserInfo>(_context);
+                return _playoffUserInfoRepository;
             }
         }
 
@@ -217,7 +246,7 @@ namespace PoolHockeyDAL.UnitOfWork
         {
             try
             {
-                _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbEntityValidationException e)
             {

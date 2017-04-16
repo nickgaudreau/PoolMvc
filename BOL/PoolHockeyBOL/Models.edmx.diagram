@@ -12,6 +12,8 @@
         <EntityTypeShape EntityType="PoolHockeyMVCEntities.TeamSchedule" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoolHockeyMVCEntities.UserFact" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PoolHockeyMVCEntities.UserInfo" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PoolHockeyMVCEntities.PlayoffPlayerInfo" Width="1.5" PointX="3.375" PointY="8.75" />
+        <EntityTypeShape EntityType="PoolHockeyMVCEntities.PlayoffUserInfo" Width="1.5" PointX="5.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

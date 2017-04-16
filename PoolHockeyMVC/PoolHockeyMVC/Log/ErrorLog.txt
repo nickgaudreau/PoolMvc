@@ -29,32 +29,23 @@
 =>16/11/2016 07:33:14  An Error occured :  Message : Error Fail while parsing deserialize NHl aPi Data for team:STL. 
 
 
-=>18/03/2017 11:46:07  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Found, code: NotFound. 
+=>19/03/2017 10:32:32  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
 
 
-=>18/03/2017 11:49:33  An Error occured :  Message : Application force to stop due to this reason: System.InvalidOperationException: An invalid request URI was provided. The request URI must either be an absolute URI or BaseAddress must be set.
-   at System.Net.Http.HttpClient.PrepareRequestMessage(HttpRequestMessage request)
-   at System.Net.Http.HttpClient.SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.GetAsync(Uri requestUri, HttpCompletionOption completionOption, CancellationToken cancellationToken)
-   at System.Net.Http.HttpClient.GetAsync(String requestUri)
-   at PoolHockeyBLL.Api.ApiXmlClient.Get[T](String url, String uri) in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolMvcDi\TEST\BLL\PoolHockeyBLL\Api\ApiXmlClient.cs:line 29 News not retrieved: , code: 0. 
+=>19/03/2017 10:32:49  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
 
 
-=>18/03/2017 11:51:39  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Found, code: NotFound. 
+=>13/04/2017 08:45:29  An Error occured :    at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at PoolHockeyBLL.MailUtility.SendMail(String body, String subject) in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolMvcDi\LIVE and Dev Current until Task Async fix\BLL\PoolHockeyBLL\MailUtility.cs:line 30 Message : Service not available, closing transmission channel. The server response was: Cannot connect to SMTP server 208.118.63.47 (208.118.63.47:25), connect error 10060 Fail to send the email to: postmaster@poolhockey.xyz at smtp address: mail.poolhockey.xyz, with ssl port: 465. 
 
 
-=>18/03/2017 13:32:18  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
-
-
-=>18/03/2017 13:55:17  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
-
-
-=>18/03/2017 13:55:32  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
-
-
-=>18/03/2017 14:09:54  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
-
-
-=>18/03/2017 14:15:35  An Error occured :  Message : Application force to stop due to this reason:  News not retrieved: Not Acceptable, code: NotAcceptable. 
+=>13/04/2017 10:00:33  An Error occured :    at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at PoolHockeyBLL.MailUtility.SendMail(String body, String subject) in C:\Users\Nick\Google Drive\ASP.NET\Projects\PoolMvcDi\LIVE and Dev Current until Task Async fix\BLL\PoolHockeyBLL\MailUtility.cs:line 30 Message : Service not available, closing transmission channel. The server response was: Cannot connect to SMTP server 208.118.63.47 (208.118.63.47:25), connect error 10060 Fail to send the email to: postmaster@poolhockey.xyz at smtp address: mail.poolhockey.xyz, with ssl port: 465. 
 
 

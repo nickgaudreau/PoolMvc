@@ -11,6 +11,8 @@ namespace PoolHockeyDAL.UnitOfWork
         GenericRepository<PoolLastYear> PoolLastYearRepository { get;}
         GenericRepository<TeamSchedule> TeamScheduleRepository { get; }
         GenericRepository<UserInfo> UserInfoRepository { get; }
+        GenericRepository<PlayoffPlayerInfo> PlayoffPlayerInfoRepository { get; }
+        GenericRepository<PlayoffUserInfo> PlayoffUserInfoRepository { get; }
 
         /// <summary>
         /// Save method.

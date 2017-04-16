@@ -189,6 +189,7 @@
     <Compile Include="Areas\Common\Controllers\NewsController.cs" />
     <Compile Include="Areas\Common\Controllers\PlayerInfoController.cs" />
     <Compile Include="Areas\Common\Controllers\PoolLastYearController.cs" />
+    <Compile Include="Areas\Common\Controllers\PlayoffUserInfoController.cs" />
     <Compile Include="Areas\Common\Controllers\UserInfoController.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -255,9 +256,11 @@
     <Content Include="img\user\vincent.png" />
     <Content Include="img\user\yannick.png" />
     <Content Include="Log\ErrorLog.txt" />
+    <Content Include="packages.config" />
     <Content Include="PoolHockeyMVC.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="PROD - DI - log4net.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -272,12 +275,12 @@
     <Content Include="Areas\Common\Views\Shared\_bestOfGrid.cshtml" />
     <Content Include="Areas\Common\Views\Shared\_undraftedGrid.cshtml" />
     <Content Include="Areas\Common\Views\PoolLastYear\AllInOneLastYear.cshtml" />
+    <Content Include="Areas\Common\Views\PlayoffUserInfo\Table.cshtml" />
+    <Content Include="Areas\Common\Views\PlayoffUserInfo\PoolerProfile.cshtml" />
     <None Include="Areas\Common\Views\UserInfo\AllInOne.cshtml" />
     <Content Include="Areas\Common\Views\UserInfo\Table.cshtml" />
     <Content Include="Areas\Common\Views\UserInfo\BestOfRound.cshtml" />
     <Content Include="Areas\Common\Views\UserInfo\PoolerProfile.cshtml" />
-    <Content Include="Areas\Common\Views\UserInfo\AllInOneLastYear.cshtml" />
-    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -295,7 +298,6 @@
     <Content Include="Scripts\views\best-of-round.js" />
     <Content Include="Scripts\views\news.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="PROD - DI - log4net.txt" />
     <Content Include="theme\color\default.css" />
     <Content Include="theme\css\animate.css" />
     <Content Include="theme\css\bootstrap.css" />
@@ -403,7 +405,6 @@
     <Content Include="theme\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="theme\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Views\Shared\_ThemeLayout.cshtml" />
-    <None Include="Web.Prod.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -417,7 +418,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>

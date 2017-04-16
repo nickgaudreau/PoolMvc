@@ -28,7 +28,7 @@
                         <li><a href="@Url.Action("Undrafted", "PlayerInfo", new {Area = "Common"})"> &nbsp;<span class="fa fa-blind off-left-20"></span> <span class="off-left-20"> Agents Libres</span></a></li>
                         <li><a href="@Url.Action("LeagueLeaders", "PlayerInfo", new {Area = "Common"})"> <span class="fa fa-bar-chart off-left-20"></span> <span class="off-left-20">Meneur LNH</span></a></li>
                         <li><a href="@Url.Action("BestOfRound", "UserInfo", new {Area = "Common"})"> <span class="fa fa-star off-left-20"></span> <span class="off-left-20">Meilleur de Ronde</span></a></li>
-                        <li><a href="@Url.Action("AllInOneLastYear", "UserInfo", new {Area = "Common"})"> <span class="fa fa-sort-amount-asc off-left-20"></span> <span class="off-left-20">Pool 2015/16</span></a></li>
+                        <li><a href="@Url.Action("AllInOneLastYear", "PoolLastYear", new {Area = "Common"})"> <span class="fa fa-sort-amount-asc off-left-20"></span> <span class="off-left-20">Pool 2015/16</span></a></li>
                         <li><a href="@Url.Action("Table", "UserInfo", new {Area = "Common"})"> <span class="fa fa-info off-left-20"></span> <span class="off-left-20"> &nbsp; &nbsp; Information</span></a></li>
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -42,7 +42,8 @@
                 </div><!-- /gn-scroller -->
             </nav>
         </li>
-        <li><a href="@Url.Action("Index", "Home", new {Area = "Common"})">POOL CHUMMY</a></li>
+        <li><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a></li>
+        <li><a href="@Url.Action("Table", "PlayoffUserInfo", new {Area = "Common"})">POOL DES SERIES</a></li>
         <li><a class="last-update" href="@Url.Action("Index", "Home", new {Area = "Common"})">@GetLastUpdate()</a></li>
         <li>
             <ul id="ul-search" class="gn-menu pull-right">

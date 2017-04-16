@@ -7,7 +7,7 @@
 
 <div class="banner-home">
     <div class="container-fluid">
-        <h1>Classement 2016/2017</h1>
+        <h1>Classement Series 2017</h1>
         <em></em>
         <h2><a href="@Url.Action("Index", "Home", new {Area = "Common"})"><span class="fa fa-home"></span></a><label>/</label>@ViewBag.Title</h2>
     </div>
@@ -17,22 +17,22 @@
 
 
 @{
-    var userBestDay = new UserInfoEntity();
+    var userBestDay = new PlayoffUserInfoEntity();
     if (ViewBag.BestDay != null)
     {
-        userBestDay = (UserInfoEntity)ViewBag.BestDay;
+        userBestDay = (PlayoffUserInfoEntity)ViewBag.BestDay;
     }
 
-    var userBestMonth = new UserInfoEntity();
+    var userBestMonth = new PlayoffUserInfoEntity();
     if (ViewBag.BestMonth != null)
     {
-        userBestMonth = (UserInfoEntity)ViewBag.BestMonth;
+        userBestMonth = (PlayoffUserInfoEntity)ViewBag.BestMonth;
     }
 
-    var userBestLastD = new UserInfoEntity();
+    var userBestLastD = new PlayoffUserInfoEntity();
     if (ViewBag.BestPtsLastD != null)
     {
-        userBestLastD = (UserInfoEntity)ViewBag.BestPtsLastD;
+        userBestLastD = (PlayoffUserInfoEntity)ViewBag.BestPtsLastD;
     }
 
 
@@ -136,14 +136,14 @@
                                 @PoolHockeyMVC.Resources.Global.DisplayName
                             </th>
                             <th>
-                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Game, "Table", "UserInfo", new
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Game, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = PoolHockeyMVC.Resources.Global.Game
                        }, null)
                             </th>
                             <th>
-                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Goal, "Table", "UserInfo", new
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Goal, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = PoolHockeyMVC.Resources.Global.Goal
@@ -151,14 +151,14 @@
 
                             </th>
                             <th>
-                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Assist, "Table", "UserInfo", new
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Assist, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = PoolHockeyMVC.Resources.Global.Assist
                        }, null)
                             </th>
                             <th>
-                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Points, "Table", "UserInfo", new
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Points, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = PoolHockeyMVC.Resources.Global.Points
@@ -166,7 +166,7 @@
                             </th>
                             <th>
                                 @*@PoolHockeyMVC.Resources.Global.Yesterday*@
-                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Yesterday, "Table", "UserInfo", new
+                                @Html.ActionLink(PoolHockeyMVC.Resources.Global.Yesterday, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = PoolHockeyMVC.Resources.Global.Yesterday
@@ -174,14 +174,14 @@
 
                             </th>
                             <th>
-                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Week, "Table", "UserInfo", new
+                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Week, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = @PoolHockeyMVC.Resources.Global.Week
                        }, null)
                             </th>
                             <th>
-                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Month, "Table", "UserInfo", new
+                                @Html.ActionLink(@PoolHockeyMVC.Resources.Global.Month, "Table", "PlayoffUserInfo", new
                        {
                            sortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")),
                            sortBy = @PoolHockeyMVC.Resources.Global.Month
@@ -232,7 +232,7 @@
                                 <td>@counter</td>
                                 <td>
                                     @*@Html.DisplayFor(modelItem => item.C_DisplayName)*@
-                                    @Html.ActionLink(item.C_DisplayName, "PoolerProfile", "UserInfo", new{ userEmail = item.C_UserEmail, displayName = item.C_DisplayName}, null)
+                                    @Html.ActionLink(item.C_DisplayName, "PoolerProfile", "PlayoffUserInfo", new{ userEmail = item.C_UserEmail, displayName = item.C_DisplayName}, null)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.I_Games)

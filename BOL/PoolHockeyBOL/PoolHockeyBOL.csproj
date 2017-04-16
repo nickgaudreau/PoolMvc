@@ -78,6 +78,12 @@
     <Compile Include="PlayerInfo.cs">
       <DependentUpon>Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="PlayoffPlayerInfo.cs">
+      <DependentUpon>Models.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PlayoffUserInfo.cs">
+      <DependentUpon>Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="PoolLastYear.cs">
       <DependentUpon>Models.tt</DependentUpon>
     </Compile>

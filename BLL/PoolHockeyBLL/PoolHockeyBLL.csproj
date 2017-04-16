@@ -65,23 +65,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiModels\EN\HockeyFeedEn.cs" />
-    <Compile Include="ApiModels\FR\HockeyFeedFr.cs" />
+    <Compile Include="ApiModels\HockeyFeedFr.cs" />
+    <Compile Include="ApiModels\MySportsFeedsModels.cs" />
     <Compile Include="Api\ApiXmlClient.cs" />
     <Compile Include="Api\IApiClient.cs" />
     <Compile Include="Api\ApiException.cs" />
     <Compile Include="Api\InjuredApiTransactions.cs" />
+    <Compile Include="Api\PlayoffMySportsFeedApiTransactions.cs" />
     <Compile Include="Api\MySportsFeedApiTransactions.cs" />
     <Compile Include="Api\NhlApiTransactions.cs" />
     <Compile Include="Api\NhlWebScrapingApiTransactions.cs" />
     <Compile Include="Api\TeamScheduleApiTransactions.cs" />
     <Compile Include="Api\ApiJsonClient.cs" />
     <Compile Include="Api\ApiResponse.cs" />
+    <Compile Include="BizEntities\IPlayerEntity.cs" />
+    <Compile Include="BizEntities\IUserEntity.cs" />
     <Compile Include="BizEntities\PastPlayerInfoEntity.cs" />
+    <Compile Include="BizEntities\PlayoffPlayerInfoEntity.cs" />
     <Compile Include="BizEntities\PlayerInfoEntity.cs" />
     <Compile Include="BizEntities\PoolLastYearEntity.cs" />
     <Compile Include="BizEntities\Statuses.cs" />
     <Compile Include="BizEntities\UserFactEntity.cs" />
+    <Compile Include="BizEntities\PlayoffUserInfoEntity.cs" />
     <Compile Include="BizEntities\UserInfoEntity.cs" />
     <Compile Include="Caching.cs" />
     <Compile Include="ConfigServices.cs" />
@@ -93,9 +98,11 @@
     <Compile Include="Contracts\IConfigServices.cs" />
     <Compile Include="Contracts\INewsServices.cs" />
     <Compile Include="Contracts\IPastPlayerInfoServices.cs" />
+    <Compile Include="Contracts\IPlayoffPlayerInfoServices.cs" />
     <Compile Include="Contracts\IPlayerInfoServices.cs" />
     <Compile Include="Contracts\IPoolLastYearServices.cs" />
     <Compile Include="Contracts\ITeamScheduleServices.cs" />
+    <Compile Include="Contracts\IPlayoffUserInfoServices.cs" />
     <Compile Include="Contracts\IUserInfoServices.cs" />
     <Compile Include="DependencyResolver.cs" />
     <Compile Include="JsonUtility.cs" />
@@ -103,10 +110,12 @@
     <Compile Include="MailUtility.cs" />
     <Compile Include="NewsServices.cs" />
     <Compile Include="PastPlayerInfoServices.cs" />
+    <Compile Include="PlayoffPlayerInfoServices.cs" />
     <Compile Include="PlayerInfoServices.cs" />
     <Compile Include="PoolLastYearServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamScheduleServices.cs" />
+    <Compile Include="PlayoffUserInfoServices.cs" />
     <Compile Include="UserInfoServices.cs" />
     <Compile Include="ViewModels\NewsFeedVm.cs" />
     <Compile Include="ViewModels\PlayerInfoVm.cs" />
@@ -129,8 +138,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Api\cumulative_player_stats.json" />
+    <None Include="Api\Playoff1stRound.json" />
     <None Include="Api\SeasonSchedule-20162017.json" />
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

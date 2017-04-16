@@ -2,7 +2,7 @@
 
 namespace PoolHockeyBLL.BizEntities
 {
-    public class UserInfoEntity : IUserEntity
+    public class PlayoffUserInfoEntity : IUserEntity
     {
         public int I_Pk { get; set; }
         public string C_Code { get; set; }
@@ -23,7 +23,7 @@ namespace PoolHockeyBLL.BizEntities
         public int I_PtLastM { get; set; }
 
         // Basic create
-        public UserInfoEntity(string userEmail, string displayName)
+        public PlayoffUserInfoEntity(string userEmail, string displayName)
         {
             C_Code = Guid.NewGuid().ToString();
             C_UserEmail = userEmail;
@@ -31,13 +31,13 @@ namespace PoolHockeyBLL.BizEntities
         }
 
         // stats updater 
-        public UserInfoEntity(int game, int g, int a, int pts)
+        public PlayoffUserInfoEntity(int game, int g, int a, int pts)
         {
             
         }
 
         // TODO to remove - unsafe object creator
-        public UserInfoEntity() { }
+        public PlayoffUserInfoEntity() { }
     }
 
 

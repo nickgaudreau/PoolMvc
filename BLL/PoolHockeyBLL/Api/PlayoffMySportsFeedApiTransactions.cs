@@ -12,20 +12,21 @@ using PoolHockeyBLL.Log;
 
 namespace PoolHockeyBLL.Api
 {
-    public class MySportsFeedApiTransactions
+    public class PlayoffMySportsFeedApiTransactions
     {
         /// <summary>
         /// get "cumulative_player_stats.json" from MySportsFeeds NHL API and return it parse into entity list
         /// </summary>
         /// <returns></returns>
-        public List<PlayerInfoEntity> GetData()
+        public List<PlayoffPlayerInfoEntity> GetData()
         {
-            var playerInfoEntities = new List<PlayerInfoEntity>();
+            var playerInfoEntities = new List<PlayoffPlayerInfoEntity>();
 
             MySportsFeeds apiResults = null;
 
             var request = new HttpClient();
-            request.BaseAddress = new Uri("https://www.mysportsfeeds.com/api/feed/pull/nhl/2016-2017-regular/");
+            // possibly this 1st one
+            request.BaseAddress = new Uri("https://www.mysportsfeeds.com/api/feed/pull/nhl/2017-playoff/");
             request.DefaultRequestHeaders.Accept.Clear();
             request.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 "bmlja2dvb2Ryb3c6R29kcm81NQ=="
@@ -35,7 +36,9 @@ namespace PoolHockeyBLL.Api
             try
             {
                 using (
-                    var response = request.GetAsync("cumulative_player_stats.json?").ContinueWith((taskWithResponse) =>
+                    //possibly this one instead.. 
+                    var response = request.GetAsync("cumulative_player_stats.json?playerstats=G,A,Pts,PPPts,SHPts,GWG").ContinueWith((taskWithResponse) =>
+                    //var response = request.GetAsync("cumulative_player_stats.json?").ContinueWith((taskWithResponse) =>
                     {
 
                         if (taskWithResponse != null)
@@ -89,7 +92,7 @@ namespace PoolHockeyBLL.Api
                             var gwg = Int32.Parse(playerstatsentry.stats.stats.GameWinningGoals.text);
                             var isRookie = Boolean.Parse(playerstatsentry.player.IsRookie);
 
-                            var playerInfo = new PlayerInfoEntity(id, team, pos, name, game, goal, assist, pts, ppp, shp, gwg, isRookie);
+                            var playerInfo = new PlayoffPlayerInfoEntity(id, team, pos, name, game, goal, assist, pts, ppp, shp, gwg, isRookie);
 
                             playerInfoEntities.Add(playerInfo);
                         }
@@ -110,12 +113,12 @@ namespace PoolHockeyBLL.Api
             return playerInfoEntities;
         }
 
-        public List<List<PlayerInfoEntity>> SplitDataTeamLists()
+        public List<List<PlayoffPlayerInfoEntity>> SplitDataTeamLists()
         {
-            var listOfTeamList = new List<List<PlayerInfoEntity>>();
+            var listOfTeamList = new List<List<PlayoffPlayerInfoEntity>>();
 
             var dataAsPlayerInfoEntities = GetData();
-            foreach (var team in Constants.Teams.Season)
+            foreach (var team in Constants.Teams.Playoff)
             {
                 var teamList = dataAsPlayerInfoEntities.Where(x => x.C_Team == team).ToList();
                 listOfTeamList.Add(teamList);
@@ -148,10 +151,6 @@ namespace PoolHockeyBLL.Api
 
 
     }
-
-
-
-    
 
 }
 

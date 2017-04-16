@@ -7,10 +7,10 @@ namespace PoolHockeyBLL
 {
     public class MailUtility
     {
-        private const string Smtp = "mail.poolhockey.info";
+        private const string Smtp = "mail.poolhockey.xyz";
         private const int SslPort = 465;
         private const int Port = 25;
-        private const string UserEmail = "postmaster@poolhockey.info";
+        private const string UserEmail = "postmaster@poolhockey.xyz";
         private const string Pass = "Carlyto3#";
 
         public static bool SendMail(string body, string subject)

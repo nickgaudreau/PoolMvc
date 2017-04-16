@@ -34,6 +34,8 @@ namespace PoolHockeyBOL
         public virtual DbSet<TeamSchedule> TeamSchedules { get; set; }
         public virtual DbSet<UserFact> UserFacts { get; set; }
         public virtual DbSet<UserInfo> UserInfoes { get; set; }
+        public virtual DbSet<PlayoffPlayerInfo> PlayoffPlayerInfoes { get; set; }
+        public virtual DbSet<PlayoffUserInfo> PlayoffUserInfoes { get; set; }
     
         public virtual int ClearAllInjuredStatuses()
         {

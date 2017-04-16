@@ -5,7 +5,7 @@ namespace PoolHockeyBLL.BizEntities
     /// <summary>
     /// SkaterData receievd from NhlAPI
     /// </summary>
-    public class PlayerInfoEntity : IPlayerEntity
+    public class PlayoffPlayerInfoEntity : IPlayerEntity
     {
         public int I_Pk { get; set; } 
         public int I_ApiId { get; set; }
@@ -50,7 +50,7 @@ namespace PoolHockeyBLL.BizEntities
         /// <param name="goal"></param>
         /// <param name="assist"></param>
         /// <param name="point"></param>
-        public PlayerInfoEntity(int apiId, string team, string pos, string name, int game, int goal, int assist, int point, int ppp, int shp, int gwG, bool isRookie)
+        public PlayoffPlayerInfoEntity(int apiId, string team, string pos, string name, int game, int goal, int assist, int point, int ppp, int shp, int gwG, bool isRookie)
         {
             // TODO throw exception if some values are null + log
 
@@ -88,7 +88,7 @@ namespace PoolHockeyBLL.BizEntities
         /// <param name="assist"></param>
         /// <param name="point"></param>
         /// <param name="toi"></param>
-        public PlayerInfoEntity(int apiId, string team, string pos, string name, int game, int goal, int assist, int point, string toi, int ppG, int shG, int gwG, int otG)
+        public PlayoffPlayerInfoEntity(int apiId, string team, string pos, string name, int game, int goal, int assist, int point, string toi, int ppG, int shG, int gwG, int otG)
         {
             // TODO throw exception if some values are null + log
 
@@ -124,7 +124,7 @@ namespace PoolHockeyBLL.BizEntities
         /// <param name="assist"></param>
         /// <param name="point"></param>
         /// <param name="toi"></param>
-        public PlayerInfoEntity(int apiId, string team, int game, int goal, int assist, int point, string toi, int ppG, int shG, int gwG, int otG)
+        public PlayoffPlayerInfoEntity(int apiId, string team, int game, int goal, int assist, int point, string toi, int ppG, int shG, int gwG, int otG)
         {
             // TODO throw exception if some values are null + log
 
@@ -151,7 +151,7 @@ namespace PoolHockeyBLL.BizEntities
         /// <summary>
         /// No args constructor needed for AutoMapper
         /// </summary>
-        public PlayerInfoEntity() { }
+        public PlayoffPlayerInfoEntity() { }
 
 
 

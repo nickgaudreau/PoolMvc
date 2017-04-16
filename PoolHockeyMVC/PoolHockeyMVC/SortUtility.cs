@@ -9,7 +9,7 @@ namespace PoolHockeyMVC
     public static class SortUtility
     {
 
-        public static IEnumerable<PlayerInfoEntity> SortPlayerInfoTable(IEnumerable<PlayerInfoEntity> playerInfoEntities, string sortBy, string sortOrder )
+        public static IEnumerable<IPlayerEntity> SortPlayerInfoTable(IEnumerable<IPlayerEntity> playerInfoEntities, string sortBy, string sortOrder )
         {
             var rm = new ResourceManager("PoolHockeyMVC.Resources.Global", Assembly.GetExecutingAssembly());
             if (sortBy == rm.GetString("Name"))
@@ -211,7 +211,7 @@ namespace PoolHockeyMVC
             return playerInfoEntities;
         }
 
-        public static IEnumerable<UserInfoEntity> SortUserInfoTable(IEnumerable<UserInfoEntity> userInfoEntities, string sortBy, string sortOrder)
+        public static IEnumerable<IUserEntity> SortUserInfoTable(IEnumerable<IUserEntity> userInfoEntities, string sortBy, string sortOrder)
         {
             var rm = new ResourceManager("PoolHockeyMVC.Resources.Global", Assembly.GetExecutingAssembly());
             

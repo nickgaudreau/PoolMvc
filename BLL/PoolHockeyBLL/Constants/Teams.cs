@@ -6,10 +6,8 @@ namespace PoolHockeyBLL.Constants
     {
         public static readonly string[] Playoff =
         {
-            "STL", "MIN", "NSH", "CHI",
-            "ANA", "TBL", "DET", "NYR",
-            "PIT", "WSH", "NYI", "DAL",
-            "FLA", "PHI", "SJS", "LAK"
+            "BOS", "OTT", "TOR", "MTL", "NYR", "CBJ", "PIT", "WSH",
+            "EDM", "MIN", "SJS", "CHI", "CGY", "ANA", "NSH", "STL"
 
         };
 

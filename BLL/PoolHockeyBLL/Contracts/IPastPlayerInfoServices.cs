@@ -8,10 +8,10 @@ namespace PoolHockeyBLL.Contracts
     /// PastPlayerInfo Service Contract
     /// </summary>
     public interface IPastPlayerInfoServices
-    {        int GetYesterdayWhere(PlayerInfoEntity playerInfoEntity);
-        int GetWeekWhere(PlayerInfoEntity playerInfoEntity);
-        int GetMonthWhere(PlayerInfoEntity playerInfoEntity);        int GetActualMonthWhere(PlayerInfo playerInfoEntity);        bool Create(IEnumerable<PlayerInfoEntity> playerInfoEntities);
-        bool Exist(PlayerInfo playerInfo);
+    {        int GetYesterdayWhere(IPlayerEntity playerInfoEntity);
+        int GetWeekWhere(IPlayerEntity playerInfoEntity);
+        int GetMonthWhere(IPlayerEntity playerInfoEntity);        int GetActualMonthWhere(IPlayerEntity playerInfoEntity);        bool Create(IEnumerable<IPlayerEntity> playerInfoEntities);
+        //bool Exist(PlayerInfo playerInfo);
 
 
     }

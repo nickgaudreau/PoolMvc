@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using PoolHockeyBLL;
 using PoolHockeyBLL.Api;
 using PoolHockeyBLL.Contracts;
@@ -17,14 +20,22 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         private readonly IPastPlayerInfoServices _pastPlayerInfoServices;
         private readonly ITeamScheduleServices _teamScheduleServices;
         private readonly IConfigServices _configServices;
+        private readonly IPlayoffUserInfoServices _playoffUserInfoServices;
+        private readonly IPlayoffPlayerInfoServices _playoffPlayerInfoServices;
 
-        public TasksController(IUserInfoServices userInfoServices, IPlayerInfoServices playerInfoServices, IPastPlayerInfoServices pastPlayerInfoServices, ITeamScheduleServices teamScheduleServices, IConfigServices configServices)
+        public TasksController(
+            IUserInfoServices userInfoServices, IPlayerInfoServices playerInfoServices, 
+            IPastPlayerInfoServices pastPlayerInfoServices, ITeamScheduleServices teamScheduleServices, 
+            IPlayoffUserInfoServices playoffUserInfoServices, IPlayoffPlayerInfoServices playoffPlayerInfoServices,
+            IConfigServices configServices)
         {
             _userInfoServices = userInfoServices;//new UserInfoServices();
             _playerInfoServices = playerInfoServices;//new PlayerInfoServices();
             _pastPlayerInfoServices = pastPlayerInfoServices;
             _teamScheduleServices = teamScheduleServices;//new TeamScheduleServices();
             _configServices = configServices;//new ConfigServices();
+            _playoffUserInfoServices = playoffUserInfoServices;
+            _playoffPlayerInfoServices = playoffPlayerInfoServices;
         }
 
         public ActionResult ClearCache()
@@ -44,7 +55,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-            var api = new MySportsFeedApiTransactions(_playerInfoServices, _pastPlayerInfoServices);
+            var api = new MySportsFeedApiTransactions();
             var data = api.SplitDataTeamLists();
 
             // Create PlayerInfo table team per team
@@ -66,7 +77,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-
+            
             //Update player info
             _playerInfoServices.UpdateStatus();
             _playerInfoServices.UpdateAvg();
@@ -100,7 +111,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-            var api = new MySportsFeedApiTransactions(_playerInfoServices, _pastPlayerInfoServices);
+            var api = new MySportsFeedApiTransactions();
             var data = api.SplitDataTeamLists();
 
             // Update PastPlayerInfo table team per team
@@ -123,7 +134,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-            var api = new MySportsFeedApiTransactions(_playerInfoServices, _pastPlayerInfoServices);
+            var api = new MySportsFeedApiTransactions();
             var data = api.SplitDataTeamLists();
 
             // Update PlayerInfo table team per team
@@ -152,6 +163,49 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
             //Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
             // For PROD only
             SendMessage("DailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            HttpRuntime.UnloadAppDomain(); // hardcore clear app recycle!
+            return RedirectToAction("Index", "Home", new { Area = "Common" });
+        }
+
+        /// <summary>
+        /// Create PastPlayerInfo and update PlayerInfo. Then RUn user info routines, injury routine and team sched routine.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult PlayoffDailyFullUpdater()
+        {
+            Caching.ClearAllCaches();
+            var timer = Stopwatch.StartNew();
+            var api = new PlayoffMySportsFeedApiTransactions();
+            var data = api.SplitDataTeamLists();
+
+            // Update PlayerInfo table team per team
+            foreach (var playerInfoList in data)
+            {
+                _pastPlayerInfoServices.Create(playerInfoList);
+                _playoffPlayerInfoServices.Update(playerInfoList);
+            }
+            _playoffPlayerInfoServices.UpdateStatus();
+            _playoffPlayerInfoServices.UpdateAvg();
+            _playoffPlayerInfoServices.UpdateInjuryStatus();
+
+            // Update UserIfo Table
+            _playoffUserInfoServices.UpdateAll();
+            _playoffUserInfoServices.UpdateBestMonth();
+            _playoffUserInfoServices.UpdateBestDay(); //// best day must be call last after all other updates
+
+            // Update TeamSchedule table -> who play today
+            // **** Removed for now...
+            _teamScheduleServices.Update();
+
+            // Udpate Config Table - set last update time -> NOW
+            _configServices.SetLastUpdate(DateTime.Now);
+
+            Caching.ClearAllCaches();
+            // for DEBUG only
+            //Debug.WriteLine("DailyFullUpdater time: " + timer.Elapsed);
+            // For PROD only
+            SendMessage("PlayoffDailyFullUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            HttpRuntime.UnloadAppDomain(); // hardcore clear app recycle!
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 
@@ -159,7 +213,7 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
         {
             Caching.ClearAllCaches();
             var timer = Stopwatch.StartNew();
-            var api = new MySportsFeedApiTransactions(_playerInfoServices, _pastPlayerInfoServices);
+            var api = new MySportsFeedApiTransactions();
             var data = api.SplitDataTeamLists();
 
             // Update PlayerInfo table team per team
@@ -183,6 +237,13 @@ namespace PoolHockeyMVC.Areas.Admin.Controllers
             Caching.ClearAllCaches();
             // For PROD only
             SendMessage("FrequentPlayerUserStatsUpdater", "Success", timer.Elapsed.ToString()); // fail will be sent by LogError
+            return RedirectToAction("Index", "Home", new { Area = "Common" });
+        }
+
+        public ActionResult GetScheduleFromJsonFile()
+        {
+            //new TeamScheduleApiTransactions(_teamScheduleServices).SaveSchedule();
+            _teamScheduleServices.Update();
             return RedirectToAction("Index", "Home", new { Area = "Common" });
         }
 

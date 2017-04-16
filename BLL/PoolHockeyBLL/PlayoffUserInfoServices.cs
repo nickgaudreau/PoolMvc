@@ -11,25 +11,25 @@ using PoolHockeyDAL.UnitOfWork;
 
 namespace PoolHockeyBLL
 {
-    public class UserInfoServices : IUserInfoServices
+    public class PlayoffUserInfoServices : IPlayoffUserInfoServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICaching _caching;
         private readonly IPastPlayerInfoServices _pastPlayerInfoServices;
 
-        public UserInfoServices(UnitOfWork unitOfWork, IPastPlayerInfoServices pastPlayerInfoServices)
+        public PlayoffUserInfoServices(UnitOfWork unitOfWork, IPastPlayerInfoServices pastPlayerInfoServices)
         {
             _unitOfWork = unitOfWork;
             _caching = new Caching();
             _pastPlayerInfoServices = pastPlayerInfoServices; 
         }
 
-        public UserInfoEntity GetByEmail(string email)
+        public PlayoffUserInfoEntity GetByEmail(string email)
         {
-            UserInfo userInfo;
+            PlayoffUserInfo userInfo;
             try
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetSingle(u => u.C_UserEmail == email);
+                userInfo = _unitOfWork.PlayoffUserInfoRepository.GetSingle(u => u.C_UserEmail == email);
             }
             catch (Exception ex)
             {
@@ -37,22 +37,22 @@ namespace PoolHockeyBLL
                 return null;
             }            if (userInfo == null) return null;
 
-            Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntity = Mapper.Map<UserInfo, UserInfoEntity>(userInfo);
+            Mapper.CreateMap<PlayoffUserInfo, PlayoffUserInfoEntity>();
+            var userInfoEntity = Mapper.Map<PlayoffUserInfo, PlayoffUserInfoEntity>(userInfo);
 
             return userInfoEntity;
         }
 
-        public UserInfoEntity GetTopBestDay()
+        public PlayoffUserInfoEntity GetTopBestDay()
         {
-            var userInfoCache = (IEnumerable<UserInfo>)_caching.GetCachedItem("UserInfoGetAll");
+            var userInfoCache = (IEnumerable<PlayoffUserInfo>)_caching.GetCachedItem("PlayoffPlayoffUserInfoGetAll");
 
-            UserInfo userInfoTopDay;
+            PlayoffUserInfo userInfoTopDay;
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
-                _caching.AddToCache("UserInfoGetAll", userInfoCache);
+                userInfoCache = _unitOfWork.PlayoffUserInfoRepository.GetAll();
+                _caching.AddToCache("PlayoffPlayoffUserInfoGetAll", userInfoCache);
                 userInfoTopDay = userInfoCache.OrderByDescending(u => u.I_BestDay).FirstOrDefault();
                 if (userInfoTopDay == null) return null;
             }
@@ -61,22 +61,22 @@ namespace PoolHockeyBLL
                 userInfoTopDay = userInfoCache.OrderByDescending(u => u.I_BestDay).FirstOrDefault();
             }
 
-            Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntity = Mapper.Map<UserInfo, UserInfoEntity>(userInfoTopDay);
+            Mapper.CreateMap<PlayoffUserInfo, PlayoffUserInfoEntity>();
+            var userInfoEntity = Mapper.Map<PlayoffUserInfo, PlayoffUserInfoEntity>(userInfoTopDay);
 
             return userInfoEntity;
         }
 
-        public UserInfoEntity GetTopBestMonth()
+        public PlayoffUserInfoEntity GetTopBestMonth()
         {
-            var userInfoCache = (IEnumerable<UserInfo>)_caching.GetCachedItem("UserInfoGetAll");
+            var userInfoCache = (IEnumerable<PlayoffUserInfo>)_caching.GetCachedItem("PlayoffPlayoffUserInfoGetAll");
 
-            UserInfo userInfoTopMonth;
+            PlayoffUserInfo userInfoTopMonth;
 
             if (userInfoCache == null)
             {
-                userInfoCache = _unitOfWork.UserInfoRepository.GetAll();
-                _caching.AddToCache("UserInfoGetAll", userInfoCache);
+                userInfoCache = _unitOfWork.PlayoffUserInfoRepository.GetAll();
+                _caching.AddToCache("PlayoffPlayoffUserInfoGetAll", userInfoCache);
                 userInfoTopMonth = userInfoCache.OrderByDescending(u => u.I_BestMonth).FirstOrDefault();
                 if (userInfoTopMonth == null) return null;
             }
@@ -85,22 +85,22 @@ namespace PoolHockeyBLL
                 userInfoTopMonth = userInfoCache.OrderByDescending(u => u.I_BestMonth).FirstOrDefault();
             }
 
-            Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntity = Mapper.Map<UserInfo, UserInfoEntity>(userInfoTopMonth);
+            Mapper.CreateMap<PlayoffUserInfo, PlayoffUserInfoEntity>();
+            var userInfoEntity = Mapper.Map<PlayoffUserInfo, PlayoffUserInfoEntity>(userInfoTopMonth);
 
             return userInfoEntity;
         }
 
-        public IEnumerable<UserInfoEntity> GetAll()
+        public IEnumerable<PlayoffUserInfoEntity> GetAll()
         {
-            var userInfoCache = (IEnumerable<UserInfo>)_caching.GetCachedItem("UserInfoGetAll");
+            var userInfoCache = (IEnumerable<PlayoffUserInfo>)_caching.GetCachedItem("PlayoffPlayoffUserInfoGetAll");
 
-            IEnumerable<UserInfo> userInfo = null;
+            IEnumerable<PlayoffUserInfo> userInfo = null;
 
             if (userInfoCache == null)
             {
-                userInfo = _unitOfWork.UserInfoRepository.GetAll();
-                _caching.AddToCache("UserInfoGetAll", userInfo);
+                userInfo = _unitOfWork.PlayoffUserInfoRepository.GetAll();
+                _caching.AddToCache("PlayoffPlayoffUserInfoGetAll", userInfo);
                 if (!userInfo.Any()) return null;
             }
             else
@@ -108,19 +108,19 @@ namespace PoolHockeyBLL
                 userInfo = userInfoCache;
             }
 
-            Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>((List<UserInfo>)userInfo);
+            Mapper.CreateMap<PlayoffUserInfo, PlayoffUserInfoEntity>();
+            var userInfoEntities = Mapper.Map<List<PlayoffUserInfo>, List<PlayoffUserInfoEntity>>((List<PlayoffUserInfo>)userInfo);
 
             return userInfoEntities;
         }
 
         // not in use..
-        public IEnumerable<UserInfoEntity> GetAllWhere(string userEmail)
+        public IEnumerable<PlayoffUserInfoEntity> GetAllWhere(string userEmail)
         {
-            var userInfos = _unitOfWork.UserInfoRepository.GetMany(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
+            var userInfos = _unitOfWork.PlayoffUserInfoRepository.GetMany(u => u.C_UserEmail == userEmail).ToList();            if (!userInfos.Any()) return null;
 
-            Mapper.CreateMap<UserInfo, UserInfoEntity>();
-            var userInfoEntities = Mapper.Map<List<UserInfo>, List<UserInfoEntity>>(userInfos);
+            Mapper.CreateMap<PlayoffUserInfo, PlayoffUserInfoEntity>();
+            var userInfoEntities = Mapper.Map<List<PlayoffUserInfo>, List<PlayoffUserInfoEntity>>(userInfos);
 
             return userInfoEntities;
         }
@@ -128,14 +128,14 @@ namespace PoolHockeyBLL
         // not in contract
         internal int GetMonthlyPointsForUser(string usermail)
         {
-            var playerInfo = _unitOfWork.PlayerInfoRepository.GetMany(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
+            var playerInfo = _unitOfWork.PlayoffPlayerInfoRepository.GetMany(p => p.C_UserEmail == usermail && p.I_Status != (int)Statuses.Out);
             //var date = DateTime.Now;
 
             var total = 0;
             foreach (var player in playerInfo)
             {
-                Mapper.CreateMap<PlayerInfo, PlayerInfoEntity>();
-                var playerInfoEntity = Mapper.Map<PlayerInfo, PlayerInfoEntity>(player);
+                Mapper.CreateMap<PlayoffPlayerInfo, PlayerInfoEntity>();
+                var playerInfoEntity = Mapper.Map<PlayoffPlayerInfo, PlayerInfoEntity>(player);
 
                 var pointsLastMonth = _pastPlayerInfoServices.GetActualMonthWhere(playerInfoEntity);
 
@@ -144,17 +144,17 @@ namespace PoolHockeyBLL
             return total;
         }
 
-        public bool Create(UserInfoEntity userInfoEntity)
+        public bool Create(PlayoffUserInfoEntity userInfoEntity)
         {
             bool created;
             try
             {
                 using (var scope = new TransactionScope())
                 {
-                    Mapper.CreateMap<UserInfoEntity, UserInfo>();
-                    var userInfo = Mapper.Map<UserInfoEntity, UserInfo>(userInfoEntity);
+                    Mapper.CreateMap<PlayoffUserInfoEntity, PlayoffUserInfo>();
+                    var userInfo = Mapper.Map<PlayoffUserInfoEntity, PlayoffUserInfo>(userInfoEntity);
 
-                    _unitOfWork.UserInfoRepository.Insert(userInfo);
+                    _unitOfWork.PlayoffUserInfoRepository.Insert(userInfo);
                     _unitOfWork.Save();
                     scope.Complete();
                     created = true;
@@ -180,7 +180,7 @@ namespace PoolHockeyBLL
             return created;
         }
 
-        public bool Update(UserInfoEntity userInfoEntity, string code)
+        public bool Update(PlayoffUserInfoEntity userInfoEntity, string code)
         {
             var updated = false;
 
@@ -188,7 +188,7 @@ namespace PoolHockeyBLL
             {
                 using (var scope = new TransactionScope())
                 {
-                    var userInfo = _unitOfWork.UserInfoRepository.GetByID(code);
+                    var userInfo = _unitOfWork.PlayoffUserInfoRepository.GetByID(code);
                     if (userInfo == null) return updated;
 
                     // Necessary stats for from NHL API
@@ -201,7 +201,7 @@ namespace PoolHockeyBLL
                     userInfo.I_PtLastM = userInfoEntity.I_PtLastM;
 
 
-                    _unitOfWork.UserInfoRepository.Update(userInfo);
+                    _unitOfWork.PlayoffUserInfoRepository.Update(userInfo);
                     _unitOfWork.Save();
                     scope.Complete();
                     updated = true;
@@ -230,15 +230,15 @@ namespace PoolHockeyBLL
 
             try
             {
-                var users = _unitOfWork.UserInfoRepository.GetAll().ToList();
+                var users = _unitOfWork.PlayoffUserInfoRepository.GetAll().ToList();
                 if (!users.Any())
                 {
-                    LogError.Write(new Exception("Error"), "UserInfo Get all returned 0 values");
+                    LogError.Write(new Exception("Error"), "PlayoffUserInfo Get all returned 0 values");
                     return false;
                 }
                 foreach (var userInfo in users)
                 {
-                    var userStats = _unitOfWork.PlayerInfoRepository
+                    var userStats = _unitOfWork.PlayoffPlayerInfoRepository
                         .GetMany(p => p.C_UserEmail == userInfo.C_UserEmail && p.I_Status != (int)Statuses.Out).ToList();
                     if (!userStats.Any())
                     {
@@ -246,7 +246,7 @@ namespace PoolHockeyBLL
                         continue;
                     }
 
-                    var userInfoEntity = new UserInfoEntity
+                    var userInfoEntity = new PlayoffUserInfoEntity
                     {
                         I_Games = userStats.Sum(u => u.I_Game),
                         I_Goals = userStats.Sum(u => u.I_Goal),
@@ -273,12 +273,12 @@ namespace PoolHockeyBLL
         public void UpdateBestDay()
         {
             var playerInfo = _unitOfWork
-                .PlayerInfoRepository
+                .PlayoffPlayerInfoRepository
                 .GetMany(p => p.C_UserEmail.Length > 0 && p.I_Status != (int)Statuses.Out)
                 .ToList();
 
 
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.PlayoffUserInfoRepository.GetAll();
 
             foreach (var user in userInfo)
             {
@@ -292,7 +292,7 @@ namespace PoolHockeyBLL
                 user.D_BestDay = DateTime.Now.AddDays(-1);
                 try
                 {
-                    _unitOfWork.UserInfoRepository.Update(user);
+                    _unitOfWork.PlayoffUserInfoRepository.Update(user);
                     _unitOfWork.Save();
                 }
                 catch (TransactionAbortedException ex)
@@ -314,7 +314,7 @@ namespace PoolHockeyBLL
 
         public void UpdateBestMonth()
         {
-            var userInfo = _unitOfWork.UserInfoRepository.GetAll();
+            var userInfo = _unitOfWork.PlayoffUserInfoRepository.GetAll();
 
             foreach (var user in userInfo)
             {
@@ -328,7 +328,7 @@ namespace PoolHockeyBLL
                 user.D_BestMonth = DateTime.Now.AddDays(-1);
                 try
                 {
-                    _unitOfWork.UserInfoRepository.Update(user);
+                    _unitOfWork.PlayoffUserInfoRepository.Update(user);
                     _unitOfWork.Save();
                 }
                 catch (TransactionAbortedException ex)

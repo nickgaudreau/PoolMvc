@@ -1,4 +1,4 @@
-﻿namespace PoolHockeyBLL.ApiModels.FR
+﻿namespace PoolHockeyBLL.ApiModels
 {
 
 

@@ -1,6 +1,6 @@
 ﻿@using System.Linq
 @using PoolHockeyBLL.BizEntities
-@model IEnumerable<PlayerInfoEntity>
+@model IEnumerable<IPlayerEntity>
 
 @{
     ViewBag.Title = "Pool 2016-17";
@@ -20,7 +20,7 @@
             @if (ViewBag.OrderedUsers != null)
             {
                 var counter = 1;
-                foreach (var user in (IEnumerable<UserInfoEntity>)ViewBag.OrderedUsers)
+                foreach (var user in (IEnumerable<IUserEntity>)ViewBag.OrderedUsers)
                 {
                     <h3>@counter - @user.C_DisplayName</h3>
                     <div class="table-responsive">
@@ -213,9 +213,9 @@
 @functions
 {
     // Return dynamic and cannot be use .Sum
-    public List<PlayerInfoEntity> GetCurrentUserPicks(string userEmail)
+    public List<IPlayerEntity> GetCurrentUserPicks(string userEmail)
     {
-        if (Model == null) return new List<PlayerInfoEntity>();
+        if (Model == null) return new List<IPlayerEntity>();
         return Model.Where(player => player.C_UserEmail == userEmail && player.I_Status != (int)Statuses.Out).ToList();
     }
 

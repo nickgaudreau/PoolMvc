@@ -19,18 +19,18 @@ namespace PoolHockeyBLL.Api
             _teamScheduleServices = teamScheduleServices; //new TeamScheduleServices();
         }
 
-        private List<Match> GetMatches()
+        private MySportsFeedSchedule GetMatches()
         {
-            List<Match> data = null;
+            MySportsFeedSchedule data = null;
             try
             {
                 // file in Client/bin
                 var appDomain = System.AppDomain.CurrentDomain;
                 var basePath = appDomain.RelativeSearchPath ?? appDomain.BaseDirectory;
-                var json = Path.Combine(basePath, "SeasonSchedule-20162017.json");
+                var json = Path.Combine(basePath, "Playoff1stRound.json");
 
                 // FIle.ReadAllText : open, read, then clode the file no need of using(){}
-                data = JsonConvert.DeserializeObject<List<Match>>(File.ReadAllText(json));
+                data = JsonConvert.DeserializeObject<MySportsFeedSchedule>(File.ReadAllText(json));
             }
             catch (Exception e)
             {
@@ -39,22 +39,23 @@ namespace PoolHockeyBLL.Api
             return data;
         }
 
-        private List<TeamSchedule> TransformDataToModel(List<Match> matches)
+        private List<TeamSchedule> TransformDataToModel(MySportsFeedSchedule matches)
         {
             var teamSchedules = new List<TeamSchedule>();
 
-            foreach (var team in Teams.Season)
+            foreach (var team in Teams.Playoff)
             {
-                var teamSchedule = matches.Where(x => String.Equals(x.a, team, StringComparison.CurrentCultureIgnoreCase)
-                || String.Equals(x.h, team, StringComparison.CurrentCultureIgnoreCase));
+                var teamSchedule = matches.fullgameschedule.gameentry.Where(x => String.Equals(x.awayTeam.Abbreviation, team, StringComparison.CurrentCultureIgnoreCase)
+                || String.Equals(x.homeTeam.Abbreviation, team, StringComparison.CurrentCultureIgnoreCase));
 
                 foreach (var match in teamSchedule)
                 {
-                    var dateString = match.est.Split(' ');
+                    //var dateString = match.date.Split(' ');
                     // dateString[0] => 20161130, change to 2016-11-30
-                    var newDate = DateTime.ParseExact(dateString[0],
-                                  "yyyyMMdd",
-                                   CultureInfo.InvariantCulture);
+                    //var newDate = DateTime.ParseExact(match.date,
+                    //              "yyyyMMdd",
+                    //               CultureInfo.InvariantCulture);
+                    var newDate = DateTime.Parse(match.date);
                     teamSchedules.Add(new TeamSchedule()
                     {
                         C_Team = team,
@@ -99,5 +100,44 @@ namespace PoolHockeyBLL.Api
         // home team
         public string h { get; set; }
     }
+
+    // New MySportsFeed
+    public class MySportsFeedSchedule
+    {
+        public Fullgameschedule fullgameschedule { get; set; }
+    }
+
+    public class Fullgameschedule
+    {
+        public string lastUpdatedOn { get; set; }
+        public Gameentry[] gameentry { get; set; }
+    }
+
+    public class Gameentry
+    {
+        public string id { get; set; }
+        public string date { get; set; }
+        public string time { get; set; }
+        public Awayteam awayTeam { get; set; }
+        public Hometeam homeTeam { get; set; }
+        public string location { get; set; }
+    }
+
+    public class Awayteam
+    {
+        public string ID { get; set; }
+        public string City { get; set; }
+        public string Name { get; set; }
+        public string Abbreviation { get; set; }
+    }
+
+    public class Hometeam
+    {
+        public string ID { get; set; }
+        public string City { get; set; }
+        public string Name { get; set; }
+        public string Abbreviation { get; set; }
+    }
+
 }
 

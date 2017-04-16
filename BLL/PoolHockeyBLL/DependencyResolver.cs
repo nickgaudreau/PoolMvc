@@ -18,6 +18,8 @@ namespace PoolHockeyBLL
             registerComponent.RegisterType<IConfigServices, ConfigServices>();
             registerComponent.RegisterType<ITeamScheduleServices, TeamScheduleServices>();
             registerComponent.RegisterType<INewsServices, NewsServices>();
+            registerComponent.RegisterType<IPlayoffPlayerInfoServices, PlayoffPlayerInfoServices>();
+            registerComponent.RegisterType<IPlayoffUserInfoServices, PlayoffUserInfoServices>();
         }
     }
 }
